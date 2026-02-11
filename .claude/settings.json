@@ -1,0 +1,34 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git:*)",
+      "Bash(gh:*)",
+      "Bash(/usr/bin/git:*)",
+      "Bash(./gradlew:*)",
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(grep:*)",
+      "Bash(find:*)",
+      "Bash(echo:*)",
+      "Bash(docker:*)",
+      "Bash(jq:*)",
+      "Bash(java:*)",
+      "Bash(javac:*)",
+      "Bash(colima:*)",
+      "Bash(find:*)",
+      "Bash(grep:*)"
+    ],
+    "deny": [
+      "Read(**/.env)",
+      "Read(**/.env.*)",
+      "Read(**/credentials.json)",
+      "Read(**/*.pem)",
+      "Read(**/*.key)",
+      "Bash(sudo:*)",
+      "Bash(su:*)",
+      "Bash(wget:*)",
+      "Bash(ssh:*)",
+      "Bash(rm -rf:*)"
+    ]
+  }
+}
