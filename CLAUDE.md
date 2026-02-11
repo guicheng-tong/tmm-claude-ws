@@ -51,4 +51,4 @@ The development cycle is as follows:
   - development.md - Before making code changes
   - testing.md - Before writing tests
   - pull-request.md - Before creating pull requests
-
+  - database-migration.md - Before writing any databse migration files
