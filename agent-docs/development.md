@@ -4,7 +4,7 @@ Development for any features or tasks must be done after creating a plan. Prompt
 Make sure you are on main or master branch with latest changes pulled unless specified otherwise.
 Checkout a new branch, and prompt user for branch name if not provided
 
-Always follow Test-Driven Developement (TDD) approach. 
+Always follow Test-Driven Development (TDD) approach. 
 
 First, come up with test cases following the Testing section, then run them and make sure they fail. 
 Then, implement the functionality.
