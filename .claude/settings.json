@@ -39,6 +39,11 @@
             "type": "command",
             "command": "bash /Users/guicheng.tong/Desktop/claude-ws/.claude/hooks/pre-push-test.sh",
             "timeout": 300
+          },
+          {
+            "type": "command",
+            "command": "bash /Users/guicheng.tong/Desktop/claude-ws/.claude/hooks/pre-push-doc-review.sh",
+            "timeout": 30
           }
         ]
       }

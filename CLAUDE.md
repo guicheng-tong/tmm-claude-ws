@@ -55,7 +55,7 @@ For any task that involves more than 2 files or has multiple possible approaches
 When entering a directory, ensure that you are on main or master branch, and that latest changes are pulled.
 
 ## Additional Documentation
-  You MUST read the relevant agent-docs/ file before performing these tasks:
+  You MUST read the relevant agent_docs/ file before performing these tasks:
   - development.md - Before making code changes
   - testing.md - Before writing tests
   - pull-request.md - Before creating pull requests
