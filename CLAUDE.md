@@ -21,8 +21,8 @@ This workspace contains source code of several services for development of TMM (
 - POI - payout instruction
 
 ## Development cycle
-The development cycle is as follows:
-1. Plan changes and clarify requirements
+When dealing with code development, always begin in planning mode. Do not implement any changes until prompted by the user.
+1. Use the `/create-plan` skill to create a plan for the changes
 2. Write tests for verification that feature is implemented correctly
 3. Implement code changes
 4. Verify that test passes, otherwise go back to implementation
@@ -45,9 +45,17 @@ The development cycle is as follows:
 - Complex shell operations that genuinely require piping between multiple commands
 - System operations (mkdir, rm, etc.)
 
+## Assumptions
+If you're making assumptions about codebase structure or making guesses, explicitly flag them as assumptions
+Ask the user questions if there are assumptions or hypothesis made.
+
+For any task that involves more than 2 files or has multiple possible approaches, briefly state your intended approach and ask if it aligns with my expectations before starting
+
+## Directory
+When entering a directory, ensure that you are on main or master branch, and that latest changes are pulled.
+
 ## Additional Documentation
   You MUST read the relevant agent-docs/ file before performing these tasks:
-  - planning.md - Before planning code changes
   - development.md - Before making code changes
   - testing.md - Before writing tests
   - pull-request.md - Before creating pull requests

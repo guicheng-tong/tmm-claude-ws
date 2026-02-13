@@ -15,8 +15,7 @@
       "Bash(java:*)",
       "Bash(javac:*)",
       "Bash(colima:*)",
-      "Bash(find:*)",
-      "Bash(grep:*)"
+      "Bash(xargs:*)"
     ],
     "deny": [
       "Read(**/.env)",
@@ -29,6 +28,20 @@
       "Bash(wget:*)",
       "Bash(ssh:*)",
       "Bash(rm -rf:*)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash(git push*)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /Users/guicheng.tong/Desktop/claude-ws/.claude/hooks/pre-push-test.sh",
+            "timeout": 300
+          }
+        ]
+      }
     ]
   }
 }
