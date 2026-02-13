@@ -16,7 +16,9 @@
       "Bash(javac:*)",
       "Bash(colima:*)",
       "Bash(xargs:*)",
-      "Bash(docker-compose:*)"
+      "Bash(docker-compose:*)",
+      "Bash(yarn build)",
+      "Bash(open:*)"
     ],
     "deny": [
       "Read(**/.env)",
@@ -44,6 +46,11 @@
           {
             "type": "command",
             "command": "bash /Users/guicheng.tong/Desktop/claude-ws/.claude/hooks/pre-push-doc-review.sh",
+            "timeout": 30
+          },
+          {
+            "type": "command",
+            "command": "bash /Users/guicheng.tong/Desktop/claude-ws/.claude/hooks/pre-push-version-check.sh",
             "timeout": 30
           }
         ]
