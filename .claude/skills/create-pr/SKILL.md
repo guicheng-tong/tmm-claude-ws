@@ -43,19 +43,42 @@ Before creating a PR, verify:
 - All changes are committed
 - Code quality checks and tests pass (run the repository's standard test/lint commands)
 
-### 3. Pull Request Template Selection
+### 3. Determine Base Branch
+
+Determine the PR target branch and confirm it with the user before proceeding:
+
+1. **Detect the repository's default branch**:
+   ```bash
+   gh repo view --json defaultBranchRef --jq '.defaultBranchRef.name'
+   ```
+2. **Suggest the base branch to the user** and ask for confirmation:
+   - Present the default branch as the suggested target (e.g., "The default branch is `master`. Should I use this as the PR base, or a different branch?")
+   - Wait for the user to confirm or specify a different branch
+3. **Store the confirmed base branch** and use it for all subsequent steps (template detection, freshness check, `gh pr create --base`, etc.)
+
+**Do NOT proceed until the user has confirmed the base branch.**
+
+### 4. Pull Request Template Selection
 
 **Always use the appropriate PR template:**
 
-1. **If the repository has a `PULL_REQUEST_TEMPLATE.md` or `pull_request_template.md` file** (typically in root or `.github/` folder): Use that template
-2. **If the repository does NOT have its own template**: Fetch the organization-wide template using GitHub CLI:
+1. **Check for a repository-specific template** by reading it from the confirmed base branch (this works regardless of which branch you are currently on):
+   ```bash
+   git show <base-branch>:.github/PULL_REQUEST_TEMPLATE.md 2>/dev/null || \
+   git show <base-branch>:.github/pull_request_template.md 2>/dev/null || \
+   git show <base-branch>:PULL_REQUEST_TEMPLATE.md 2>/dev/null || \
+   git show <base-branch>:pull_request_template.md 2>/dev/null || \
+   echo "NO_REPO_TEMPLATE"
+   ```
+
+2. **If no repository template exists** (output is `NO_REPO_TEMPLATE`): Fetch the organization-wide template using GitHub CLI:
    ```bash
    gh api repos/transferwise/.github/contents/PULL_REQUEST_TEMPLATE.md --jq '.content' | base64 -d
    ```
 
 **IMPORTANT**: Do NOT create custom PR description structures. Always follow the standardized template for consistency and compliance with security and documentation requirements.
 
-### 4. Template Usage Guidelines
+### 5. Template Usage Guidelines
 
 When filling out PR templates:
 
@@ -65,17 +88,30 @@ When filling out PR templates:
 - **Keep `[optional]` markers**: Leave `[optional]` words as-is for optional items
 - **Add meaningful description**: Describe what has been changed, why it was changed, and the expected outcome (up to 300 characters)
 
-### 5. PR Creation Process
+### 6. PR Creation Process
 
 Follow these steps:
 
 1. **Understand changes**: Use `git status` and `git diff` to understand what has been modified
-2. **Establish PR base**: Check the current branch, if there are newer changes, and ask user if the base of the PR is correct
-2. **Create branch** (if not already on a feature branch): Use format `<ticket-id>-<short-description>`
+2. **Ensure branch is up to date with base**:
+   ```bash
+   git fetch origin <base-branch>
+   git log --oneline HEAD..origin/<base-branch>
+   ```
+   If there are commits on the base branch not in the feature branch:
+   - Inform the user that the branch is **behind** the base by N commits
+   - Ask the user whether to rebase before creating the PR
+   - If yes, rebase and force push:
+     ```bash
+     git rebase origin/<base-branch>
+     git push --force-with-lease
+     ```
+   - If no, proceed but note the PR will need updating later
+3. **Create branch** (if not already on a feature branch): Use format `<ticket-id>-<short-description>`
 3. **Commit changes**: Ensure only tracked files are committed with a clear commit message
 4. **Create PR**: Use `gh pr create` with the template
 
-### 6. Commit Message Format
+### 7. Commit Message Format
 
 Structure commit messages as follows:
 - **First line**: `<ticket-id> <short description>` (up to 50 characters)
@@ -87,7 +123,7 @@ Structure commit messages as follows:
   Co-Authored-By: Claude <noreply@anthropic.com>
   ```
 
-### 7. PR Creation Command
+### 8. PR Creation Command
 
 Use `gh pr create` with a HEREDOC for proper formatting.
 
@@ -126,7 +162,7 @@ EOF
 )"
 ```
 
-**Note**: The multi-commit NOTE block should only be included when there are 2 or more commits (see section 8).
+**Note**: The multi-commit NOTE block should only be included when there are 2 or more commits (see section 10).
 
 **Draft PRs**: Check for the environment variable `PR_CREATOR_DRAFT`. If it is set to `true`, add the `--draft` flag to create the PR as a draft:
 
@@ -134,7 +170,7 @@ EOF
 gh pr create --draft --title "TW-1234 short description" --body "..."
 ```
 
-### 8. Linking Issues
+### 9. Linking Issues
 
 If a Jira ticket is referenced:
 - Add the ticket link to the PR description: `https://transferwise.atlassian.net/browse/<ticket-id>`
@@ -145,19 +181,20 @@ When a user says "create a PR for my changes":
 
 1. **FIRST: Read `~/.claude/settings.json`** - Check for `PR_CREATOR_DRAFT` and `PR_CREATOR_SKIP_USER_PROMPTS`. Store these values.
 2. Check `git status` for changes
-3. Check if there's a local `PULL_REQUEST_TEMPLATE.md`
-4. If no local template, fetch org template
-5. Create branch if needed
-6. Commit with proper message format
-7. Run repository's standard test/lint commands to ensure code quality
-8. **Create PR using `gh pr create`** - Include `--draft` flag if `PR_CREATOR_DRAFT=true`
-9. Return the PR URL to the user and open it in the browser using `open <PR_URL>`
+3. **Determine base branch** using `gh repo view` and **ask user to confirm** before proceeding
+4. Check for repo PR template using `git show <base-branch>:.github/PULL_REQUEST_TEMPLATE.md`
+5. If no repo template found, fetch org-wide template via `gh api`
+6. Create branch if needed
+7. Commit with proper message format
+8. Run repository's standard test/lint commands to ensure code quality
+9. **Create PR using `gh pr create`** - Include `--draft` flag if `PR_CREATOR_DRAFT=true`
+10. Return the PR URL to the user and open it in the browser using `open <PR_URL>`
 
 **Common mistake to avoid**: Do NOT skip step 1. The settings MUST be read before any other action.
 
 ## Additional Guidelines
 
-### 9. Multi-Commit PRs
+### 10. Multi-Commit PRs
 
 When a PR contains multiple commits:
 
@@ -181,7 +218,7 @@ When a PR contains multiple commits:
 <rest of template content>
 ```
 
-### 10. Session Prompts History
+### 11. Session Prompts History
 
 **IMPORTANT**: This section can be disabled by setting the environment variable `PR_CREATOR_SKIP_USER_PROMPTS=true` in Claude settings. Check for this variable before including the prompts section.
 
