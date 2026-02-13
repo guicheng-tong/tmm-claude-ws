@@ -4,7 +4,7 @@
       "Bash(git:*)",
       "Bash(gh:*)",
       "Bash(/usr/bin/git:*)",
-      "Bash(./gradlew:*)",
+      "Bash(*/gradlew:*)",
       "Bash(ls:*)",
       "Bash(cat:*)",
       "Bash(grep:*)",
@@ -15,7 +15,8 @@
       "Bash(java:*)",
       "Bash(javac:*)",
       "Bash(colima:*)",
-      "Bash(xargs:*)"
+      "Bash(xargs:*)",
+      "Bash(docker-compose:*)"
     ],
     "deny": [
       "Read(**/.env)",

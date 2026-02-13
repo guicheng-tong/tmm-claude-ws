@@ -151,7 +151,7 @@ When a user says "create a PR for my changes":
 6. Commit with proper message format
 7. Run repository's standard test/lint commands to ensure code quality
 8. **Create PR using `gh pr create`** - Include `--draft` flag if `PR_CREATOR_DRAFT=true`
-9. Return the PR URL to the user
+9. Return the PR URL to the user and open it in the browser using `open <PR_URL>`
 
 **Common mistake to avoid**: Do NOT skip step 1. The settings MUST be read before any other action.
 
