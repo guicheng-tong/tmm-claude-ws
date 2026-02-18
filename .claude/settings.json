@@ -2,23 +2,25 @@
   "permissions": {
     "allow": [
       "Bash(git:*)",
-      "Bash(gh:*)",
-      "Bash(/usr/bin/git:*)",
-      "Bash(*/gradlew:*)",
-      "Bash(ls:*)",
-      "Bash(cat:*)",
-      "Bash(grep:*)",
-      "Bash(find:*)",
-      "Bash(echo:*)",
-      "Bash(docker:*)",
-      "Bash(jq:*)",
-      "Bash(java:*)",
-      "Bash(javac:*)",
-      "Bash(colima:*)",
-      "Bash(xargs:*)",
-      "Bash(docker-compose:*)",
+      "Bash(gh *)",
+      "Bash(*/gradlew *)",
+      "Bash(ls *)",
+      "Bash(cat *)",
+      "Bash(grep *)",
+      "Bash(find *)",
+      "Bash(echo *)",
+      "Bash(docker *)",
+      "Bash(jq *)",
+      "Bash(java *)",
+      "Bash(javac *)",
+      "Bash(colima *)",
+      "Bash(xargs *)",
+      "Bash(docker-compose *)",
       "Bash(yarn build)",
-      "Bash(open:*)"
+      "Bash(open *github*)",
+      "Bash(curl:*)",
+      "Bash(sort:*)",
+      "Bash(done)"
     ],
     "deny": [
       "Read(**/.env)",
@@ -34,6 +36,18 @@
     ]
   },
   "hooks": {
+    "PermissionRequest": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/redirect-to-native-tools.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
     "PreToolUse": [
       {
         "matcher": "Bash(git push*)",

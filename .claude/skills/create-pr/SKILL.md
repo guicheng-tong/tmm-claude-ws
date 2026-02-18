@@ -42,6 +42,9 @@ You should have already read `~/.claude/settings.json` above. If not, do it now 
 Before creating a PR, verify:
 - All changes are committed
 - Code quality checks and tests pass (run the repository's standard test/lint commands)
+- All required library versions are bumped
+  - Library version needs to be bumped if there are any code changes, even for any code addition 
+  - If changelog exists, update changelog
 
 ### 3. Determine Base Branch
 
