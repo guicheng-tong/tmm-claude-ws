@@ -36,24 +36,10 @@ This workspace contains source code of several services for development of TMM (
 - Offload research, exploration, and parallel analysis to subagents
 - For complex problems, throw more compute at it via subagents
 - One task per subagent for focused execution
+- Subagent specifications live in `.claude/agents/` — use them when available
 
 ### 3. Self-Improvement Loop
-- After ANY correction from the user: update `tasks/lessons.md` with the pattern
-- Write rules for yourself to avoid the same mistake
-- Ruthlessly iterate on these lessons until mistake rate drops
-- Review lessons at session start for every relevant project
-
-### 4. Verification Before Done
-- Never mark a task complete without proving it works
-- Diff behavior between main or master and your changes when relevant
-- Ask yourself: "Would a staff engineer approve this?"
-- Run tests, check logs, demonstrate correctness
-
-### 5. Demand Elegance (Balanced)
-- For non-trivial changes: pause and ask "is there a more elegant way?"
-- If a fix feels hacky: "Knowing everything I know now, implement the elegant solution"
-- Skip this for simple, obvious fixes - don't over-engineer
-- Challenge your own work before presenting it
+- After ANY correction from the user: spawn the `lessons-tracker` subagent to update `tasks/lessons.md`
 
 ## Task Management
 
@@ -76,25 +62,11 @@ This workspace contains source code of several services for development of TMM (
 ## Git worktree
 When making changes to a repository, always ask if there is an existing worktree for it, if not, create a new worktree for it and ask user for ticket number, format the worktree name as `{repository-name}-TFXENG{ticket-number}-{short-description}`. The main repository should always be kept as the main or master branch and kept up to date.
 
-## Tool Preferences
-
-**Always prefer Claude Code's native tools over bash equivalents:**
-
-| Instead of | Use |
-|------------|-----|
-| `bash grep`, `bash rg` | `Grep` tool (supports `-A`, `-B`, `-C` context, `head_limit`, `glob` filters) |
-| `bash cat`, `bash head`, `bash tail` | `Read` tool (supports `offset` and `limit` parameters) |
-| `bash find` | `Glob` tool (supports patterns like `**/*.java`) |
-
-**Why**: Native tools don't require bash permissions, avoid permission prompts for piped commands, and provide structured output optimized for Claude's processing.
-
-**When bash is still appropriate**:
-- Commands with no native equivalent (git, gradlew, docker, gh, etc.)
-- Complex shell operations that genuinely require piping between multiple commands
-- System operations (mkdir, rm, etc.)
+## Bash Usage
+- Do not use piped bash commands unless absolutely necessary
+- Native tool redirection is enforced by the `redirect-to-native-tools` hook — no need to memorize the table
 
 ## Additional Documentation
   You MUST read the relevant agent_docs/ file before performing these tasks:
   - development.md - Before making code changes
-  - testing.md - Before writing tests
-  - database-migration.md - Before writing any databse migration files
+  - database-migration.md - Before writing any database migration files
