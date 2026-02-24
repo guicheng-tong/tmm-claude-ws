@@ -10,34 +10,11 @@ description: |
 
 This skill helps create pull requests that follow Wise's standardized templates and conventions.
 
-## ⚠️ MANDATORY: Read Settings First
-
-**STOP. Before doing ANYTHING else, you MUST read the user's settings file.**
-
-```bash
-cat ~/.claude/settings.json 2>/dev/null
-```
-
-Look for these environment variables in the `env` section:
-
-| Variable | Action Required |
-|----------|-----------------|
-| `PR_CREATOR_DRAFT` = `"true"` | **MUST** add `--draft` flag to `gh pr create` |
-| `PR_CREATOR_SKIP_USER_PROMPTS` = `"true"` | **MUST** omit the user prompts history section |
-
-**Store these values and apply them when creating the PR. Do NOT skip this step.**
-
----
-
 ## Instructions
 
 When helping users create pull requests, follow these guidelines:
 
-### 1. Check Configuration (ALREADY DONE ABOVE)
-
-You should have already read `~/.claude/settings.json` above. If not, do it now before proceeding.
-
-### 2. Pre-PR Checks
+### 1. Pre-PR Checks
 
 Before creating a PR, verify:
 - All changes are committed
@@ -46,7 +23,7 @@ Before creating a PR, verify:
   - Library version needs to be bumped if there are any code changes, even for any code addition 
   - If changelog exists, update changelog
 
-### 3. Determine Base Branch
+### 2. Determine Base Branch
 
 Determine the PR target branch and confirm it with the user before proceeding:
 
@@ -61,7 +38,7 @@ Determine the PR target branch and confirm it with the user before proceeding:
 
 **Do NOT proceed until the user has confirmed the base branch.**
 
-### 4. Pull Request Template Selection
+### 3. Pull Request Template Selection
 
 **Always use the appropriate PR template:**
 
@@ -81,7 +58,7 @@ Determine the PR target branch and confirm it with the user before proceeding:
 
 **IMPORTANT**: Do NOT create custom PR description structures. Always follow the standardized template for consistency and compliance with security and documentation requirements.
 
-### 5. Template Usage Guidelines
+### 4. Template Usage Guidelines
 
 When filling out PR templates:
 
@@ -91,7 +68,7 @@ When filling out PR templates:
 - **Keep `[optional]` markers**: Leave `[optional]` words as-is for optional items
 - **Add meaningful description**: Describe what has been changed, why it was changed, and the expected outcome (up to 300 characters)
 
-### 6. PR Creation Process
+### 5. PR Creation Process
 
 Follow these steps:
 
@@ -114,7 +91,7 @@ Follow these steps:
 3. **Commit changes**: Ensure only tracked files are committed with a clear commit message
 4. **Create PR**: Use `gh pr create` with the template
 
-### 7. Commit Message Format
+### 6. Commit Message Format
 
 Structure commit messages as follows:
 - **First line**: `<ticket-id> <short description>` (up to 50 characters)
@@ -126,14 +103,11 @@ Structure commit messages as follows:
   Co-Authored-By: Claude <noreply@anthropic.com>
   ```
 
-### 8. PR Creation Command
+### 7. PR Creation Command
 
 Use `gh pr create` with a HEREDOC for proper formatting.
 
-**REMEMBER**: If `PR_CREATOR_DRAFT=true` was set in settings, you MUST include `--draft` flag.
-
 ```bash
-# If PR_CREATOR_DRAFT=true, use: gh pr create --draft --title ...
 gh pr create --title "TW-1234 short description" --body "$(cat <<'EOF'
 ## Context
 
@@ -165,15 +139,9 @@ EOF
 )"
 ```
 
-**Note**: The multi-commit NOTE block should only be included when there are 2 or more commits (see section 10).
+**Note**: The multi-commit NOTE block should only be included when there are 2 or more commits (see section 9).
 
-**Draft PRs**: Check for the environment variable `PR_CREATOR_DRAFT`. If it is set to `true`, add the `--draft` flag to create the PR as a draft:
-
-```bash
-gh pr create --draft --title "TW-1234 short description" --body "..."
-```
-
-### 9. Linking Issues
+### 8. Linking Issues
 
 If a Jira ticket is referenced:
 - Add the ticket link to the PR description: `https://transferwise.atlassian.net/browse/<ticket-id>`
@@ -182,22 +150,19 @@ If a Jira ticket is referenced:
 
 When a user says "create a PR for my changes":
 
-1. **FIRST: Read `~/.claude/settings.json`** - Check for `PR_CREATOR_DRAFT` and `PR_CREATOR_SKIP_USER_PROMPTS`. Store these values.
-2. Check `git status` for changes
-3. **Determine base branch** using `gh repo view` and **ask user to confirm** before proceeding
-4. Check for repo PR template using `git show <base-branch>:.github/PULL_REQUEST_TEMPLATE.md`
-5. If no repo template found, fetch org-wide template via `gh api`
-6. Create branch if needed
-7. Commit with proper message format
-8. Run repository's standard test/lint commands to ensure code quality
-9. **Create PR using `gh pr create`** - Include `--draft` flag if `PR_CREATOR_DRAFT=true`
-10. Return the PR URL to the user and open it in the browser using `open <PR_URL>`
-
-**Common mistake to avoid**: Do NOT skip step 1. The settings MUST be read before any other action.
+1. Check `git status` for changes
+2. **Determine base branch** using `gh repo view` and **ask user to confirm** before proceeding
+3. Check for repo PR template using `git show <base-branch>:.github/PULL_REQUEST_TEMPLATE.md`
+4. If no repo template found, fetch org-wide template via `gh api`
+5. Create branch if needed
+6. Commit with proper message format
+7. Run repository's standard test/lint commands to ensure code quality
+8. **Create PR using `gh pr create`**
+9. Return the PR URL to the user and open it in the browser using `open <PR_URL>`
 
 ## Additional Guidelines
 
-### 10. Multi-Commit PRs
+### 9. Multi-Commit PRs
 
 When a PR contains multiple commits:
 
@@ -221,11 +186,9 @@ When a PR contains multiple commits:
 <rest of template content>
 ```
 
-### 11. Session Prompts History
+### 10. Session Prompts History
 
-**IMPORTANT**: This section can be disabled by setting the environment variable `PR_CREATOR_SKIP_USER_PROMPTS=true` in Claude settings. Check for this variable before including the prompts section.
-
-**Always include** a collapsible section at the end of the PR body (before the "Generated with Claude Code" line) containing all user prompts from the current session that led to the changes being submitted, **UNLESS** `PR_CREATOR_SKIP_USER_PROMPTS` is explicitly set to `true`.
+**Always include** a collapsible section at the end of the PR body (before the "Generated with Claude Code" line) containing all user prompts from the current session that led to the changes being submitted.
 
 **Format:**
 ```markdown
@@ -251,30 +214,11 @@ When a PR contains multiple commits:
 - Place the section before the "🤖 Generated with Claude Code" footer
 - This provides transparency and traceability for reviewers
 
-## Configuration
-
-The following environment variables can be set in Claude settings (`.claude/settings.json`) to customize the PR creator behavior:
-
-- `PR_CREATOR_DRAFT`: Set to `true` to create PRs as drafts (default: `false`)
-- `PR_CREATOR_SKIP_USER_PROMPTS`: Set to `true` to skip including user prompts history in PR descriptions (default: `false`)
-
-**Example configuration in `.claude/settings.json`:**
-```json
-{
-  "env": {
-    "PR_CREATOR_DRAFT": "true",
-    "PR_CREATOR_SKIP_USER_PROMPTS": "true"
-  }
-}
-```
-
 ## Quality Checklist
 
 Before submitting the PR, verify:
-- [ ] User configuration was checked FIRST (`PR_CREATOR_DRAFT`, `PR_CREATOR_SKIP_USER_PROMPTS`)
-- [ ] PR created as draft if `PR_CREATOR_DRAFT=true`
 - [ ] Template is correctly filled out
 - [ ] Description clearly explains the changes
 - [ ] Jira ticket is linked (if applicable)
 - [ ] Code quality checks pass
-- [ ] Session prompts history is included (unless `PR_CREATOR_SKIP_USER_PROMPTS=true`)
+- [ ] Session prompts history is included

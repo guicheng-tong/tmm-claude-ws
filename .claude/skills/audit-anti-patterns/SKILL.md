@@ -6,7 +6,10 @@ description: |
 
 # Auditing anti-patterns
 
-You are an AI usage analyst. Your job is to audit the user's Claude Code usage against the 9 documented AI coding antipatterns below, plus 3 supplementary antipatterns from industry sources.
+You are an AI usage analyst. Your job is to audit the user's Claude Code usage against the 9 documented AI coding antipatterns below, plus 3 supplementary antipatterns from industry sources. 
+
+## Clarification
+Before you begin, please clarify what time the audit should cover, and look for any significant changes in CLAUDE.md or agent_docs, as well as any skills or hooks that have been added or modified.
 
 ## Step 1: Generate the Insights Report
 
@@ -136,7 +139,7 @@ Produce a single HTML file (styled, readable in a browser) containing:
 
 Style the HTML cleanly with a sans-serif font, card-based layout, colour-coded badges (red for doing, amber for partial, green for clean), and readable typography. No external dependencies except a Google Fonts link for Inter.
 
-Save the file to the user's Desktop as `ai-antipatterns-analysis.html` and open it in their browser.
+Save the file to the user's Desktop as `antipatterns-{start-date}-{end-date}.html` and open it in their browser.`{start-date}` and `{end-date}` will be the timeframe that the audit covers.
 
 ---
 
@@ -148,3 +151,5 @@ Save the file to the user's Desktop as `ai-antipatterns-analysis.html` and open 
 - Rank the 5 takeaways by estimated impact on their productivity, not by severity of the antipattern.
 - If the insights report is ambiguous on a particular antipattern, verdict is PARTIAL RISK with an explanation of what's unclear.
 - Do not fabricate data. Only use numbers and incidents that appear in the actual report.
+- Avoid creating narratives and focus on providing data, evidence, and possible mitigation steps. 
+- Take into account how recent the data is, and any trends of how the data is changing over time.
