@@ -41,32 +41,17 @@ This workspace contains source code of several services for development of TMM (
 ### 3. Self-Improvement Loop
 - After ANY correction from the user: spawn the `lessons-tracker` subagent to update `tasks/lessons.md`
 
-## Task Management
-
-1. **Plan First**: Use `/create-plan` to create a plan.
-2. **Create checklist**: Using the plan from before, create a checklist in `tasks/todo-{plan}.md`
-3. **Begin Implementation**: Begin implementation based on the checklist
-4. **Track Progress**: Mark items complete as you go
-5. **Explain Changes**: Highlight what changed in each step
-6. **Document Results**: Add review section to `tasks/todo-{plan}.md`
-7. **Capture Lessons**: Update `tasks/lessons.md` after corrections
-
 ## Core Principles
 - **Simplicity First**: Make every change as simple as possible. Impact minimal code.
 - **No Laziness**: Find root causes. No temporary fixes. Senior developer standards.
 - **Minimal Impact**: Chainsaw. Not flamethrower. Surgical. Avoid introducing bugs.
 
-## Skill Usage
-- Always use `/create-pull-request` skill for creating pull requests
-
-## Git worktree
-When making changes to a repository, always ask if there is an existing worktree for it, if not, create a new worktree for it and ask user for ticket number, format the worktree name as `{repository-name}-TFXENG{ticket-number}-{short-description}`. The main repository should always be kept as the main or master branch and kept up to date.
-
 ## Bash Usage
-- Do not use piped bash commands unless absolutely necessary
+- Do not use pipe or `&&` in bash commands unless absolutely necessary
 - Native tool redirection is enforced by the `redirect-to-native-tools` hook — no need to memorize the table
 
 ## Additional Documentation
   You MUST read the relevant agent_docs/ file before performing these tasks:
+  - implementation-workflow.md - MUST read at the start of any implementation task. Defines the default end-to-end workflow.
   - development.md - Before making code changes
   - database-migration.md - Before writing any database migration files
