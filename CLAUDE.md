@@ -23,22 +23,19 @@ This workspace contains source code of several services for development of TMM (
 - LP - liquidity provider
 - VD - value date
 
-## Workflow Orchestration
+## Implementation workflow — MANDATORY
+Before writing or changing ANY code you MUST read `agent_docs/implementation-workflow.md` and follow it.
+This applies to every task: features, bug fixes, refactors, config changes — no exceptions.
+Do NOT skip straight to coding. The first step is always Phase 1 (Plan & Scope).
 
-### 1. Plan Mode Defaults
-- Enter plan mode for ANY non-trivial task (3+ steps or architectural decisions)
-- If something goes sideways, STOP and re-plan immediately - don't keep pushing
-- Use plan mode for verification steps, not just building
-- Write detailed specs upfront to reduce ambiguity
-
-### 2. Subagent Strategy
+## Subagent Strategy
 - Use subagents liberally to keep main context window clean
 - Offload research, exploration, and parallel analysis to subagents
 - For complex problems, throw more compute at it via subagents
 - One task per subagent for focused execution
 - Subagent specifications live in `.claude/agents/` — use them when available
 
-### 3. Self-Improvement Loop
+### Self-Improvement Loop
 - After ANY correction from the user: spawn the `lessons-tracker` subagent to update `tasks/lessons.md`
 
 ## Core Principles
@@ -46,12 +43,7 @@ This workspace contains source code of several services for development of TMM (
 - **No Laziness**: Find root causes. No temporary fixes. Senior developer standards.
 - **Minimal Impact**: Chainsaw. Not flamethrower. Surgical. Avoid introducing bugs.
 
-## Bash Usage
-- Do not use pipe or `&&` in bash commands unless absolutely necessary
-- Native tool redirection is enforced by the `redirect-to-native-tools` hook — no need to memorize the table
-
 ## Additional Documentation
   You MUST read the relevant agent_docs/ file before performing these tasks:
-  - implementation-workflow.md - MUST read at the start of any implementation task. Defines the default end-to-end workflow.
   - development.md - Before making code changes
   - database-migration.md - Before writing any database migration files

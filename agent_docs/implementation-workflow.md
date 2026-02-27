@@ -10,6 +10,13 @@ Follow the `create-plan` skill process. This covers:
 - Scoping the implementation
 - Finalising the plan into a file in `plans/`
 
+
+After the first draft of the plan is done, help user review the plan: 
+  - Show the user each subsection. Do not attempt to group multiple subsections for one review.
+  - User will comment on any refinement or modifications
+  - After each comment from user to update the subsection, show the updated subsection and wait for more comments
+  - Once user approves the subsection, move on to show the next one subsection
+
 **Skip if**: the change is a one-liner or trivially scoped (e.g., fixing a typo, updating a config value).
 
 **Gate: User must approve the plan before proceeding.**
@@ -68,7 +75,7 @@ Follow the `create-pr` skill process. This covers:
 - Handle failures:
   - **Flaky/unrelated failures**: re-run the failed jobs
   - **Related failures**: fix the issue and loop back to Phase 5
-- If checks are still pending: wait 5 minutes (`sleep 300`), then re-run `check-pr`
+- If checks are still pending: wait 5 minutes (`sleep 300`), then re-run the entire `check-pr` skill process
 - Repeat until all checks pass or a related failure needs user input
 
 **Skip if**: never — always required.

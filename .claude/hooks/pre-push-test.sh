@@ -2,11 +2,12 @@
 # Pre-push test hook for TMM repos
 # Runs appropriate tests based on project type before allowing git push
 
-# Extract the git push command from ARGUMENTS
-cmd=$(echo "$ARGUMENTS" | jq -r '.command')
+# Read tool input from stdin (Claude Code PreToolUse sends JSON on stdin)
+INPUT=$(cat)
+cmd=$(echo "$INPUT" | jq -r '.tool_input.command')
 
-# Check if this is a git push command
-if ! echo "$cmd" | grep -q '^git push'; then
+# Check if this is a git push command (handles flags between git and push, e.g. git -c ... push)
+if ! echo "$cmd" | grep -qE '^git\b.*\bpush\b'; then
   exit 0  # Not a push command, allow it
 fi
 
@@ -16,6 +17,30 @@ cwd=$(pwd)
 # Check if we're in a TMM repo
 if ! echo "$cwd" | grep -q '/claude-ws/tmm-repos/'; then
   exit 0  # Not in TMM repos, skip tests
+fi
+
+# Find the remote tracking branch to diff against
+remote_branch=$(git rev-parse --abbrev-ref --symbolic-full-name @{upstream} 2>/dev/null)
+if [ -z "$remote_branch" ]; then
+  if git rev-parse --verify origin/main >/dev/null 2>&1; then
+    remote_branch="origin/main"
+  elif git rev-parse --verify origin/master >/dev/null 2>&1; then
+    remote_branch="origin/master"
+  fi
+fi
+
+# Skip tests if no changes or only documentation files changed
+if [ -n "$remote_branch" ]; then
+  changed_files=$(git diff --name-only "$remote_branch"...HEAD 2>/dev/null)
+  if [ -z "$changed_files" ]; then
+    echo "📄 No unpushed changes — skipping tests."
+    exit 0
+  fi
+  non_doc_changes=$(echo "$changed_files" | grep -v -E '^(CLAUDE\.md|AGENTS\.md|agent_docs/)' || true)
+  if [ -z "$non_doc_changes" ]; then
+    echo "📄 Only documentation files changed — skipping tests."
+    exit 0
+  fi
 fi
 
 echo "🧪 Running tests before git push..."

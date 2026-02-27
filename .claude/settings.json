@@ -2,25 +2,33 @@
   "permissions": {
     "allow": [
       "Bash(git:*)",
-      "Bash(gh *)",
+      "Bash(gh:*)",
       "Bash(*/gradlew *)",
-      "Bash(ls *)",
-      "Bash(cat *)",
-      "Bash(grep *)",
-      "Bash(find *)",
-      "Bash(echo *)",
-      "Bash(docker *)",
-      "Bash(jq *)",
-      "Bash(java *)",
-      "Bash(javac *)",
-      "Bash(colima *)",
-      "Bash(xargs *)",
-      "Bash(docker-compose *)",
-      "Bash(yarn build)",
-      "Bash(open *github*)",
+      "Bash(ls:*)",
+      "Bash(docker:*)",
+      "Bash(docker-compose:*)",
+      "Bash(colima:*)",
+      "Bash(jq:*)",
+      "Bash(java:*)",
+      "Bash(javac:*)",
+      "Bash(jar:*)",
+      "Bash(javap:*)",
+      "Bash(xargs:*)",
       "Bash(curl:*)",
       "Bash(sort:*)",
-      "Bash(done)"
+      "Bash(tee:*)",
+      "Bash(unzip:*)",
+      "Bash(lsof:*)",
+      "Bash(pgrep:*)",
+      "Bash(yarn:*)",
+      "Bash(pnpm:*)",
+      "Bash(npx:*)",
+      "Bash(nvm:*)",
+      "Bash(python3:*)",
+      "Bash(terraform:*)",
+      "Bash(open *github*)",
+      "mcp__atlassian*",
+      "Read"
     ],
     "deny": [
       "Read(**/.env)",
@@ -42,30 +50,59 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/redirect-to-native-tools.sh",
+            "command": "bash .claude/hooks/redirect-to-native-tools.sh",
             "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "afplay /System/Library/Sounds/Glass.aiff"
           }
         ]
       }
     ],
     "PreToolUse": [
       {
-        "matcher": "Bash(git push*)",
+        "matcher": "Bash",
         "hooks": [
           {
             "type": "command",
-            "command": "bash /Users/guicheng.tong/Desktop/claude-ws/.claude/hooks/pre-push-test.sh",
-            "timeout": 300
+            "command": "bash .claude/hooks/no-bash-chaining.sh",
+            "timeout": 5
           },
           {
             "type": "command",
-            "command": "bash /Users/guicheng.tong/Desktop/claude-ws/.claude/hooks/pre-push-doc-review.sh",
+            "command": "bash .claude/hooks/pre-push-test.sh",
+            "timeout": 1200
+          },
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/pre-push-doc-review.sh",
             "timeout": 30
           },
           {
             "type": "command",
-            "command": "bash /Users/guicheng.tong/Desktop/claude-ws/.claude/hooks/pre-push-version-check.sh",
+            "command": "bash .claude/hooks/pre-push-version-check.sh",
             "timeout": 30
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "afplay /System/Library/Sounds/Glass.aiff"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "afplay /System/Library/Sounds/Glass.aiff"
           }
         ]
       }

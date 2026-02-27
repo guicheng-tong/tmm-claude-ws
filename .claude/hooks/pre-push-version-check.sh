@@ -3,11 +3,12 @@
 # Ensures library module versions are bumped (semver increment) when source files change.
 # On failure, outputs structured instructions for Claude to auto-fix and retry.
 
-# Extract the git push command from ARGUMENTS
-cmd=$(echo "$ARGUMENTS" | jq -r '.command')
+# Read tool input from stdin (Claude Code PreToolUse sends JSON on stdin)
+INPUT=$(cat)
+cmd=$(echo "$INPUT" | jq -r '.tool_input.command')
 
-# Check if this is a git push command
-if ! echo "$cmd" | grep -q '^git push'; then
+# Check if this is a git push command (handles flags between git and push, e.g. git -c ... push)
+if ! echo "$cmd" | grep -qE '^git\b.*\bpush\b'; then
   exit 0
 fi
 

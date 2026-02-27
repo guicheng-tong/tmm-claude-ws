@@ -7,11 +7,12 @@
 # Review file format: first line is 0 (docs up to date) or 1 (updates needed),
 # rest of file contains suggested updates if 1.
 
-# Extract the git push command from ARGUMENTS
-cmd=$(echo "$ARGUMENTS" | jq -r '.command')
+# Read tool input from stdin (Claude Code PreToolUse sends JSON on stdin)
+INPUT=$(cat)
+cmd=$(echo "$INPUT" | jq -r '.tool_input.command')
 
-# Check if this is a git push command
-if ! echo "$cmd" | grep -q '^git push'; then
+# Check if this is a git push command (handles flags between git and push, e.g. git -c ... push)
+if ! echo "$cmd" | grep -qE '^git\b.*\bpush\b'; then
   exit 0
 fi
 
@@ -59,14 +60,6 @@ if [ -z "$changed_files" ]; then
   exit 0
 fi
 
-# Check if ONLY doc files changed (CLAUDE.md, AGENTS.md, agent_docs/*)
-non_doc_changes=$(echo "$changed_files" | grep -v -E '^(CLAUDE\.md|AGENTS\.md|agent_docs/)' || true)
-
-if [ -z "$non_doc_changes" ]; then
-  # Only documentation files changed, allow push
-  exit 0
-fi
-
 # Get HEAD commit hash
 head_hash=$(git rev-parse HEAD)
 
@@ -102,8 +95,8 @@ echo "Repository: $repo_name"
 echo "Branch: $(git rev-parse --abbrev-ref HEAD)"
 echo "HEAD: $head_hash"
 echo ""
-echo "Files changed (non-doc):"
-echo "$non_doc_changes" | sed 's/^/  /'
+echo "Files changed:"
+echo "$changed_files" | sed 's/^/  /'
 echo ""
 echo "Documentation files in this repo:"
 [ -f "CLAUDE.md" ] && echo "  CLAUDE.md"
