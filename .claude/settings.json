@@ -50,7 +50,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash .claude/hooks/redirect-to-native-tools.sh",
+            "command": "bash \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/redirect-to-native-tools.sh",
             "timeout": 5
           },
           {
@@ -66,22 +66,22 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash .claude/hooks/no-bash-chaining.sh",
+            "command": "bash \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/no-bash-chaining.sh",
             "timeout": 5
           },
           {
             "type": "command",
-            "command": "bash .claude/hooks/pre-push-test.sh",
+            "command": "bash \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/pre-push-test.sh",
             "timeout": 1200
           },
           {
             "type": "command",
-            "command": "bash .claude/hooks/pre-push-doc-review.sh",
+            "command": "bash \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/pre-push-doc-review.sh",
             "timeout": 30
           },
           {
             "type": "command",
-            "command": "bash .claude/hooks/pre-push-version-check.sh",
+            "command": "bash \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/pre-push-version-check.sh",
             "timeout": 30
           }
         ]
