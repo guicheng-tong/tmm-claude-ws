@@ -90,10 +90,16 @@ Follow these steps to gather the information needed:
 - **Layered**: AGENTS.md is the overview; agent_docs/ files have the detail. Don't repeat information across layers
 - **Verifiable**: For the repository map, consider adding a comment at the top with a command to regenerate/validate it (e.g., a find command that can be diffed against the documented structure)
 
-## Evaluate Generated Docs
-After creating the initial docs, evaluate them - list each doc, with 2 evaluation criteria: 
-- How important is this in helping navigate the repository?
-- How easily will this information go out of date?
+## Fact checking
+Fact check all the generated docs against the code logic, if there are any inaccurate docs, fix them. 
+Repeat this step until all generated docs are logically correct and accurately reflect code logic.
 
-If any are not important, and easily go out of date, remove them. 
+## Evaluation
+After creating the initial docs, evaluate them - list each doc, with 2 evaluation criteria: 
+- Helpfulness - how important is this in helping navigate the repository?
+- Brittleness - how easily will this information go out of date?
+
+Highlight each section that is medium or high brittleness. If they are low helpfulness, remove them.
+If they are high brittleness **and** high helpfulness, use the `/add-doc-validation` skill to create validation scripts and wire them into CI. This ensures the build fails when documentation drifts from code, rather than silently going stale.
+
 Present the evaluation to the user.
