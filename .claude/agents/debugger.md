@@ -1,6 +1,9 @@
-# Debugger
+---
+name: Debugger
+description: Spawn this agent when investigating a bug, unexpected behaviour, or failing test.
+---
 
-Spawn this agent when investigating a bug, unexpected behaviour, or failing test.
+# Debugger
 
 ## Task
 1. **Analyse code paths** — Read the relevant code and trace the execution path(s) that could produce the reported symptom. Form initial hypotheses about what went wrong.

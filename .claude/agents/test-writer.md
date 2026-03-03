@@ -1,6 +1,10 @@
+---
+name: Test Writer
+description: Spawn this agent when writing tests for new or modified functionality using Groovy and the Spock framework.
+---
+
 # Test Writer
 
-Spawn this agent when writing tests for new or modified functionality.
 This agent writes tests exclusively in **Groovy using the Spock framework**.
 
 ## Task

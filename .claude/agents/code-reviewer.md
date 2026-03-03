@@ -1,6 +1,9 @@
-# Code Reviewer
+---
+name: Code Reviewer
+description: Spawn this agent after implementation, before creating a PR.
+---
 
-Spawn this agent after implementation, before creating a PR.
+# Code Reviewer
 
 ## Task
 1. Read the diff of changes on the current branch vs the base branch
