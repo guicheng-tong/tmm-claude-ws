@@ -31,7 +31,7 @@ Before exploring or searching a repository's code, first check for documentation
 - VD - value date
 
 ## Implementation workflow — MANDATORY
-Before writing or changing ANY code you MUST read `agent_docs/implementation-workflow.md` and follow it.
+You MUST start each session following `agent_docs/workflow/implementation.md`.
 This applies to every task: features, bug fixes, refactors, config changes — no exceptions.
 Do NOT skip straight to coding. The first step is always Phase 1 (Plan & Scope).
 
@@ -40,10 +40,7 @@ Do NOT skip straight to coding. The first step is always Phase 1 (Plan & Scope).
 - Offload research, exploration, and parallel analysis to subagents
 - For complex problems, throw more compute at it via subagents
 - One task per subagent for focused execution
-- Subagent specifications live in `.claude/agents/` — use them when available
-
-## Self-Improvement Loop
-- After ANY correction from the user: spawn the `lessons-tracker` subagent to update `tasks/lessons.md`
+- Subagent specifications live in `.claude/agents/` - read all the use cases for the agents, so you can use the correct subagent for each scenaril.
 
 ## Additional Documentation
   You MUST read the relevant agent_docs/ file before performing these tasks:

@@ -43,7 +43,8 @@
       "Bash(pwd)",
       "Bash(cat:*)",
       "Bash(head:*)",
-      "Bash(tail:*)"
+      "Bash(tail:*)",
+      "Bash(sed:*)"
     ],
     "deny": [
       "Read(**/.env)",

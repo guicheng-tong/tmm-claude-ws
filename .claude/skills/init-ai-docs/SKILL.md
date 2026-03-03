@@ -6,7 +6,7 @@ description: |
 
 # Initialize AI Documentation
 
-You are an AI documentation analyst. Your job is to analyze a project repository and create documentation that helps AI agents (and developers) understand the project quickly.
+You are an AI documentation analyst. Your job is to analyze a project repository and create documentation that helps AI agents (and developers) understand the project quickly. First clarify with the user which project repository you should create documentation for.
 
 ## Scope
 
@@ -91,7 +91,6 @@ Follow these steps to gather the information needed:
 - **Verifiable**: For the repository map, consider adding a comment at the top with a command to regenerate/validate it (e.g., a find command that can be diffed against the documented structure)
 
 ## Evaluate Generated Docs
-
 After creating the initial docs, evaluate them - list each doc, with 2 evaluation criteria: 
 - How important is this in helping navigate the repository?
 - How easily will this information go out of date?

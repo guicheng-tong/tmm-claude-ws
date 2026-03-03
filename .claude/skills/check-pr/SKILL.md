@@ -22,46 +22,37 @@ This skill checks the current PR's review comments and CI status, summarising ac
 - **One PR found**: Use it automatically.
 - **Multiple PRs found**: Present the list and ask the user to pick one.
 
-### 2. Fetch and Summarise Review Comments
+### 2. Poll CI and Comments (until both are settled)
 
-- Fetch comments and reviews:
-  ```bash
-  gh pr view <number> --json comments,reviews
-  ```
-- Build a markdown table from the results:
-
-  | # | Comment | Author | Changes needed? | Suggested response |
-  |---|---------|--------|----------------|--------------------|
-
-- For each comment or review, classify using your judgment:
-  - **Changes needed = Yes**: The reviewer is requesting a code change. Leave "Suggested response" blank — this is an action item for the user.
-  - **Changes needed = No**: The comment is informational, a question, or praise. Suggest a brief response the user could post.
-- Truncate long comments to ~120 characters in the table, preserving the key point.
-- End the table with a summary line: **"X comments requiring changes, Y informational"**
-
-### 3. Check CI Status (poll until complete)
-
-Poll CI checks in a loop until every check has reached a terminal state (no pending or in-progress checks remain).
+Poll in a loop until **all CI checks have reached a terminal state** AND **review comments have stabilised** (no new comments appearing between consecutive polls).
 
 #### Polling loop
 
-1. Run CI checks:
+1. Fetch CI checks:
    ```bash
    gh pr checks <number>
    ```
-2. Parse the output. Each check will be in one of these states: `pass`, `fail`, `pending`, or `running` (in-progress).
-3. **If any checks are still `pending` or `running`**:
-   - Log a brief status update to the user, e.g. *"3/7 checks complete — waiting on CI…"*
-   - Wait 30 seconds:
-     ```bash
-     sleep 30
-     ```
-   - Go back to step 1.
-4. **Once all checks have reached a terminal state** (`pass` or `fail`), exit the loop and proceed.
+2. Fetch review comments and reviews:
+   ```bash
+   gh pr view <number> --json comments,reviews
+   ```
+3. Parse CI output. Each check will be in one of these states: `pass`, `fail`, `pending`, or `running` (in-progress).
+4. Track the **comment count** (total number of comments + reviews) from the current poll.
+5. Determine whether to keep polling:
+   - **CI not done**: any checks are `pending` or `running`.
+   - **Comments not settled**: the comment count increased compared to the previous poll (or this is the first poll).
+   - If **either** condition is true:
+     - Log a brief status update, e.g. *"3/7 checks complete, 2 comments so far — waiting…"*
+     - Wait 30 seconds:
+       ```bash
+       sleep 30
+       ```
+     - Go back to step 1.
+   - If **both** CI is done and comment count is stable (unchanged for two consecutive polls), exit the loop and proceed.
 
-#### Analyse results
+#### Analyse CI results
 
-- **All checks pass**: Report success and move to step 4.
+- **All checks pass**: Report success.
 - **Failures present**:
   1. Get the PR's changed files:
      ```bash
@@ -86,10 +77,25 @@ Poll CI checks in a loop until every check has reached a terminal state (no pend
      - **Related failure** (failing tests correspond to changed files):
        - Flag to the user with the file path correlation so they can investigate.
 
-### 4. Present Results
+#### Summarise Review Comments
+
+Using the final comment data from the last poll:
+
+- Build a markdown table:
+
+  | # | Comment | Author | Changes needed? | Suggested response |
+  |---|---------|--------|----------------|--------------------|
+
+- For each comment or review, classify using your judgment:
+  - **Changes needed = Yes**: The reviewer is requesting a code change. Leave "Suggested response" blank — this is an action item for the user.
+  - **Changes needed = No**: The comment is informational, a question, or praise. Suggest a brief response the user could post.
+- Truncate long comments to ~120 characters in the table, preserving the key point.
+- End the table with a summary line: **"X comments requiring changes, Y informational"**
+
+### 3. Present Results
 
 Combine everything into a single summary:
 
 1. **PR Info**: Title, URL, and state
-2. **Review Comments**: The markdown table from step 2, plus the summary count
+2. **Review Comments**: The markdown table from the comment summary above, plus the summary count
 3. **CI Status**: Pass/fail status, any actions taken (re-runs triggered), and any related failures requiring attention

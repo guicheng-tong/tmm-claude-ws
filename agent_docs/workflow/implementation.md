@@ -91,4 +91,3 @@ Follow the `create-pr` skill process. This covers:
 
 - Mark checklist items in `tasks/todo-{plan}.md` as you go
 - After completion, add a review section to the checklist file
-- Capture lessons in `tasks/lessons.md` after any corrections from the user
