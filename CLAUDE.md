@@ -1,10 +1,16 @@
 # Overview
 
-This workspace contains source code of several services for development of TMM (treasury money movement) team in Wise. It is organised as such:
-- tmm-repos: This folder contains all services directly owned by TMM
-- relevant-repos: This folder contains services not owned by TMM, but might have some direct connection to TMM services, such as payout-service being used by TMM services for payouts
-- infra-repos: This folder contains services that provide infrastructure, and indirectly are related to TMM services, such as configurations for kubernetes setup
-- plans: This folder contains md files for projects that are in progress. 
+This workspace is a meta-repo for TMM team. It is organised as such:
+- tmm-repos: This folder contains all repositories directly owned by TMM
+- relevant-repos: This folder contains repositories not owned by TMM, but might have some direct connection to TMM repositories, such as payout-service
+- infra-repos: This folder contains repositories that provide infrastructure, and indirectly are used by TMM, such as configurations for kubernetes setup
+- plans: This folder contains md files for projects that are in progress.
+
+## Repository-Level Documentation
+Before exploring or searching a repository's code, first check for documentation at its root:
+- `CLAUDE.md`, `README.md`, `AGENTS.md`, and `agent_docs/` in the target repository
+- These files describe architecture, conventions, and domain context that will save unnecessary exploration
+- Only fall back to broad codebase exploration if the docs don't answer your question
 
 ## Aliases
 - UI - treasury
@@ -13,6 +19,7 @@ This workspace contains source code of several services for development of TMM (
 - MC - market-connector
 - BSS - bank-scraper-service
 - trxinv - transactions-inventory
+- TMM - Treasury Money Movement
 
 ## Domain aliases
 - MO - market order
@@ -35,13 +42,8 @@ Do NOT skip straight to coding. The first step is always Phase 1 (Plan & Scope).
 - One task per subagent for focused execution
 - Subagent specifications live in `.claude/agents/` — use them when available
 
-### Self-Improvement Loop
+## Self-Improvement Loop
 - After ANY correction from the user: spawn the `lessons-tracker` subagent to update `tasks/lessons.md`
-
-## Core Principles
-- **Simplicity First**: Make every change as simple as possible. Impact minimal code.
-- **No Laziness**: Find root causes. No temporary fixes. Senior developer standards.
-- **Minimal Impact**: Chainsaw. Not flamethrower. Surgical. Avoid introducing bugs.
 
 ## Additional Documentation
   You MUST read the relevant agent_docs/ file before performing these tasks:

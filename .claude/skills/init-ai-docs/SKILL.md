@@ -89,3 +89,12 @@ Follow these steps to gather the information needed:
 - **Stable**: Documentation should not go stale with every code change. Prefer documenting patterns and structures over specific class names where possible
 - **Layered**: AGENTS.md is the overview; agent_docs/ files have the detail. Don't repeat information across layers
 - **Verifiable**: For the repository map, consider adding a comment at the top with a command to regenerate/validate it (e.g., a find command that can be diffed against the documented structure)
+
+## Evaluate Generated Docs
+
+After creating the initial docs, evaluate them - list each doc, with 2 evaluation criteria: 
+- How important is this in helping navigate the repository?
+- How easily will this information go out of date?
+
+If any are not important, and easily go out of date, remove them. 
+Present the evaluation to the user.

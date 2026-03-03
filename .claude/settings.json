@@ -28,7 +28,22 @@
       "Bash(terraform:*)",
       "Bash(open *github*)",
       "mcp__atlassian*",
-      "Read"
+      "Read",
+      "Bash(open:*)",
+      "Bash(npm:*)",
+      "Bash(node:*)",
+      "Bash(mkdir:*)",
+      "Bash(cp:*)",
+      "Bash(mv:*)",
+      "Bash(touch:*)",
+      "Bash(kill:*)",
+      "Bash(wc:*)",
+      "Bash(diff:*)",
+      "Bash(which:*)",
+      "Bash(pwd)",
+      "Bash(cat:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)"
     ],
     "deny": [
       "Read(**/.env)",

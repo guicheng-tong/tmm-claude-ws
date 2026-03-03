@@ -39,12 +39,28 @@ This skill checks the current PR's review comments and CI status, summarising ac
 - Truncate long comments to ~120 characters in the table, preserving the key point.
 - End the table with a summary line: **"X comments requiring changes, Y informational"**
 
-### 3. Check CI Status
+### 3. Check CI Status (poll until complete)
 
-- Run CI checks:
-  ```bash
-  gh pr checks <number>
-  ```
+Poll CI checks in a loop until every check has reached a terminal state (no pending or in-progress checks remain).
+
+#### Polling loop
+
+1. Run CI checks:
+   ```bash
+   gh pr checks <number>
+   ```
+2. Parse the output. Each check will be in one of these states: `pass`, `fail`, `pending`, or `running` (in-progress).
+3. **If any checks are still `pending` or `running`**:
+   - Log a brief status update to the user, e.g. *"3/7 checks complete — waiting on CI…"*
+   - Wait 30 seconds:
+     ```bash
+     sleep 30
+     ```
+   - Go back to step 1.
+4. **Once all checks have reached a terminal state** (`pass` or `fail`), exit the loop and proceed.
+
+#### Analyse results
+
 - **All checks pass**: Report success and move to step 4.
 - **Failures present**:
   1. Get the PR's changed files:
@@ -66,6 +82,7 @@ This skill checks the current PR's review comments and CI status, summarising ac
          gh run rerun <run_id> --failed
          ```
        - Notify the user that unrelated failures were re-triggered.
+       - **After re-running**: Go back to the **Polling loop** above and wait for the re-triggered jobs to complete before reporting final results.
      - **Related failure** (failing tests correspond to changed files):
        - Flag to the user with the file path correlation so they can investigate.
 

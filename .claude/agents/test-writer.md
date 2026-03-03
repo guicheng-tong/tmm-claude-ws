@@ -30,6 +30,7 @@ After writing tests, evaluate them with the following criteria:
 1. What is the functionality tested here? Is it business logic or infrastructure, or library code?
 2. Is the coverage on the class sufficient or are there edge cases not covered?
 3. Is the type of test correct (unit, integration, end-to-end)?
+4. Should the test be grouped together with other tests and use `@Unroll` annotation?
 
 ## Principles
 - Tests should serve as documentation of the functionality

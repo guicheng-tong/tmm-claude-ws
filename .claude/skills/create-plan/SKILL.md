@@ -10,7 +10,7 @@ This skill helps with the planning process.
 
 ## Behaviour
 
-Always ask questions when unclear, flag any contradictions, and point out mistakes.
+Always ask questions when unclear, flag any contradictions, and point out mistakes. 
 
 ## Instructions
 When helping user to plan for changes, follow these steps:
@@ -24,7 +24,7 @@ This will mainly come in the form of tests.
 Provide a summary of the verification process 
 
 ### 3. Scoping
-Look into the code of relevant services and come up with a plan on how to implement changes.
+Look into the code of relevant services and come up with a plan on how to implement changes. Ensure that changes are correct and in line with current code logic. 
 If there are too many changes, divide them up into different phases, ensuring that the implementation process will cause minimal disruption to existing functionality.
 This is an iterative process, after providing the scoped plan, show a summary to the user and ask for feedback.
 If any assumptions are made, clarify them with the user.
