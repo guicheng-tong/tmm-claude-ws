@@ -1,6 +1,6 @@
 ---
 name: Test Writer
-description: Spawn this agent when writing tests for new or modified functionality using Groovy and the Spock framework.
+description: Proactively use this agent for any task that involves writing, adding, or updating tests. Handles unit, integration, and end-to-end tests using Groovy and the Spock framework.
 ---
 
 # Test Writer

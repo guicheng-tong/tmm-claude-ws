@@ -1,6 +1,6 @@
 ---
 name: Code Reviewer
-description: Spawn this agent after implementation, before creating a PR.
+description: Proactively use this agent to review code changes after implementation, before creating a PR. Evaluates diffs for elegance, minimal impact, and regressions.
 ---
 
 # Code Reviewer

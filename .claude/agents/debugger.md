@@ -1,6 +1,6 @@
 ---
 name: Debugger
-description: Spawn this agent when investigating a bug, unexpected behaviour, or failing test.
+description: Proactively use this agent when investigating a bug, unexpected behaviour, or failing test. Traces code paths, ranks hypotheses, and presents fix options.
 ---
 
 # Debugger
