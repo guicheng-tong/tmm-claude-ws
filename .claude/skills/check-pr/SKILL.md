@@ -12,8 +12,14 @@ This skill checks the current PR's review comments and CI status, summarising ac
 
 ## Instructions
 
-### 1. Detect the Current PR
+### 1. Identify Which PR to Check
 
+**First**, determine if the context makes it clear which PR to check:
+- User provided a PR number or URL in their message
+- Currently working in a repository subdirectory with an active feature branch (not `main` or `master`)
+- Recent conversation context indicates focus on a specific PR
+
+**If context is clear** (e.g., on a feature branch in a specific repo):
 - Get the current branch and find associated PRs:
   ```bash
   gh pr list --head "$(git branch --show-current)" --json number,title,url,state
@@ -21,6 +27,11 @@ This skill checks the current PR's review comments and CI status, summarising ac
 - **No PRs found**: Inform the user that no PR exists for the current branch and stop.
 - **One PR found**: Use it automatically.
 - **Multiple PRs found**: Present the list and ask the user to pick one.
+
+**If context is NOT clear** (e.g., on `main` branch, in meta-repo root, or no specific PR mentioned):
+- Use AskUserQuestion to ask the user for the PR number or URL
+- Accept formats like: `123`, `#123`, `https://github.com/owner/repo/pull/123`, or `owner/repo#123`
+- Once provided, use that PR for the rest of the checks
 
 ### 2. Poll CI and Comments (until both are settled)
 
@@ -32,12 +43,38 @@ Poll in a loop until **all CI checks have reached a terminal state** AND **revie
    ```bash
    gh pr checks <number>
    ```
-2. Fetch review comments and reviews:
+2. Fetch review comments, reviews, and review threads (including nested comments):
    ```bash
    gh pr view <number> --json comments,reviews
    ```
+   ```bash
+   gh api graphql -f query='
+   query {
+     repository(owner: "OWNER", name: "REPO") {
+       pullRequest(number: NUMBER) {
+         reviewThreads(first: 50) {
+           nodes {
+             id
+             isResolved
+             comments(first: 20) {
+               nodes {
+                 id
+                 body
+                 author { login }
+                 createdAt
+                 path
+                 line
+               }
+             }
+           }
+         }
+       }
+     }
+   }'
+   ```
+   Replace `OWNER`, `REPO`, and `NUMBER` with actual values from the PR URL or context.
 3. Parse CI output. Each check will be in one of these states: `pass`, `fail`, `pending`, or `running` (in-progress).
-4. Track the **comment count** (total number of comments + reviews) from the current poll.
+4. Track the **comment count** (total number of unresolved comments + reviews + review thread comments) from the current poll.
 5. Determine whether to keep polling:
    - **CI not done**: any checks are `pending` or `running`.
    - **Comments not settled**: the comment count increased compared to the previous poll (or this is the first poll).
@@ -81,16 +118,24 @@ Poll in a loop until **all CI checks have reached a terminal state** AND **revie
 
 Using the final comment data from the last poll:
 
+- **Filter out resolved threads**: Only include review threads where `isResolved` is `false`. Skip any resolved threads entirely.
+- **Include all comments in unresolved threads**: For each unresolved review thread, include ALL comments in that thread (the original comment and any replies).
+- **Filter bot comments**: Exclude automated comments from bots like `github-actions`, `platon-github-app-production`, `wise-sonarqube-pr-decorator`, `copilot-pull-request-reviewer` (summary comments only, not inline code review comments).
 - Build a markdown table:
 
-  | # | Comment | Author | Changes needed? | Suggested response |
-  |---|---------|--------|----------------|--------------------|
+  | # | Comment | Author | File:Line | Changes needed? | Suggested response |
+  |---|---------|--------|-----------|-----------------|-------------------|
 
-- For each comment or review, classify using your judgment:
-  - **Changes needed = Yes**: The reviewer is requesting a code change. Leave "Suggested response" blank — this is an action item for the user.
-  - **Changes needed = No**: The comment is informational, a question, or praise. Suggest a brief response the user could post.
+- For each comment or review thread, classify using your judgment:
+  - **Changes needed = Yes**: The reviewer is requesting a code change, improvement, or fix. Leave "Suggested response" blank — this is an action item for the user.
+  - **Changes needed = No**: The comment is informational, a question, acknowledgment, or praise. Suggest a brief response the user could post.
+- For inline code review comments, include the file path and line number in the "File:Line" column (e.g., `script.sh:35`).
+- For general PR comments, leave "File:Line" blank or use "-".
 - Truncate long comments to ~120 characters in the table, preserving the key point.
-- End the table with a summary line: **"X comments requiring changes, Y informational"**
+- End the table with a summary line: **"X comments requiring changes, Y informational, Z resolved (hidden)"**
+
+**If there are comments requiring changes**:
+- After presenting the table, explicitly prompt the user: "**Action required:** Please address the X comment(s) marked as requiring changes before merging."
 
 ### 3. Present Results
 
