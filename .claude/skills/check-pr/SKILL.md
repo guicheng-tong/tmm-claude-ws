@@ -134,8 +134,23 @@ Using the final comment data from the last poll:
 - Truncate long comments to ~120 characters in the table, preserving the key point.
 - End the table with a summary line: **"X comments requiring changes, Y informational, Z resolved (hidden)"**
 
-**If there are comments requiring changes**:
-- After presenting the table, explicitly prompt the user: "**Action required:** Please address the X comment(s) marked as requiring changes before merging."
+**Interactive comment resolution**:
+- After presenting the table, for each unaddressed comment (both those requiring changes and informational ones):
+  1. Show the comment details (author, file:line if applicable, full comment text)
+  2. For comments requiring changes: Propose possible actions (e.g., "Fix the issue", "Mark as resolved with explanation", "Discuss further")
+  3. For informational comments: Show the suggested response from the table
+  4. Use AskUserQuestion to ask what action to take:
+     - For comments requiring changes: Options like "I'll fix this", "Mark as won't fix (explain why)", "Need clarification", "Skip for now"
+     - For informational comments: Options like "Post suggested response", "Write custom response", "Skip"
+  5. If user chooses to post a response, use the GitHub CLI to add the comment:
+     ```bash
+     gh pr comment <number> --body "response text"
+     ```
+     For inline comments on specific lines, use:
+     ```bash
+     gh api repos/{owner}/{repo}/pulls/<number>/comments -f body="response text" -f commit_id="<commit_sha>" -f path="<file_path>" -F line=<line_number>
+     ```
+  6. Continue through all unaddressed comments until user chooses to skip or all are addressed
 
 ### 3. Present Results
 
