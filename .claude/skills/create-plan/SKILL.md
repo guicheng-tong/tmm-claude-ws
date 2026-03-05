@@ -1,7 +1,7 @@
 ---
 name: create-plan
 description: |
-  Establish a process for planning changes. This skill MUST be used when users mention any changes to be made to the codebase. This includes implementing new features, fixing bugs, or any other changes to the codebase.
+  Establish a process for planning changes.
 ---
 
 # Planning

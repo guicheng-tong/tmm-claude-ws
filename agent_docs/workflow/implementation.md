@@ -9,16 +9,10 @@ Follow the `create-plan` skill process. This covers:
 - Clarification of goals, assumptions, and context
 - Establishing a verification process (primarily tests)
 - Scoping the implementation
+- Iterative plan review with user
 - Finalising the plan into the appropriate location:
   - `projects/{project-name}/plans/` if using project structure
   - `plans/` for standalone plans
-
-
-After the first draft of the plan is done, help user review the plan: 
-  - Show the user each subsection. Do not attempt to group multiple subsections for one review.
-  - User will comment on any refinement or modifications
-  - After each comment from user to update the subsection, show the updated subsection and wait for more comments
-  - Once user approves the subsection, move on to show the next one subsection
 
 **Skip if**: the change is a one-liner or trivially scoped (e.g., fixing a typo, updating a config value).
 
@@ -48,7 +42,6 @@ After the first draft of the plan is done, help user review the plan:
 
 ## Phase 4: Implementation
 
-- Read `agent_docs/development.md` and follow the TDD approach
 - Read `agent_docs/database-migration.md` if database migrations are involved
 - Work through the checklist in `tasks/todo-{plan}.md`, marking items complete as you go
 - Highlight what changed in each step

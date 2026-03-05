@@ -23,30 +23,38 @@ Documentation that merely mirrors code structure adds maintenance cost without v
 
 ### 1. Determine context
 
-- Get the current working directory and identify the repository name
-- Get the current branch name and HEAD commit hash
-- Identify the workspace root (the claude-ws directory)
+- Get the current working directory
+- Get the workspace root from `$CLAUDE_PROJECT_DIR` environment variable
+- **If current directory is the workspace root**: Ask the user which repository to verify (list repositories in `tmm-repos/`, `relevant-repos/`, `infra-repos/`). Once selected, set the repository path to `<workspace>/<selected-repo>` and use that path for all subsequent operations.
+- **If current directory is inside a repository**: Use the current directory as the repository path
+- Identify the repository name from the directory path
+- Get the current branch name and HEAD commit hash for the repository using `git -C <repo-path>`
 
 ### 2. Compute the diff
 
-- Find the remote tracking branch (e.g., `origin/main` or `origin/master`)
+Use `git -C <repo-path>` for all git commands to operate on the selected repository.
+
+- Find the remote tracking branch (e.g., `origin/main` or `origin/master`):
+  ```
+  git -C <repo-path> rev-parse --abbrev-ref --symbolic-full-name @{upstream}
+  ```
 - Compute the diff of all commits on the current branch vs the remote tracking branch:
   ```
-  git diff <remote-tracking-branch>...HEAD
+  git -C <repo-path> diff <remote-tracking-branch>...HEAD
   ```
 - Also get the list of changed files:
   ```
-  git diff --name-only <remote-tracking-branch>...HEAD
+  git -C <repo-path> diff --name-only <remote-tracking-branch>...HEAD
   ```
 - If there is no remote tracking branch, diff against `origin/main` or `origin/master`
 
 ### 3. Find documentation files
 
-Search for these documentation files in the repository root:
+Search for these documentation files in the repository path (`<repo-path>`):
 
-- `CLAUDE.md`
-- `AGENTS.md`
-- `agent_docs/**/*.md`
+- `<repo-path>/CLAUDE.md`
+- `<repo-path>/AGENTS.md`
+- `<repo-path>/agent_docs/**/*.md`
 
 Read all documentation files that exist. If none exist, write a review file with `0` and stop.
 

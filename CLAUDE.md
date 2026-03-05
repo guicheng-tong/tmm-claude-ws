@@ -33,7 +33,7 @@ Before exploring or searching a repository's code, first check for documentation
 ## Implementation workflow — MANDATORY
 You MUST start each session following `agent_docs/workflow/implementation.md`.
 This applies to every task: features, bug fixes, refactors, config changes — no exceptions.
-Do NOT skip straight to coding. The first step is always Phase 1 (Plan & Scope).
+Do NOT skip straight to coding. The first step is always Phase 1: Plan & Scope.
 
 ## Subagent Strategy
 - Use subagents liberally to keep main context window clean
@@ -44,5 +44,4 @@ Do NOT skip straight to coding. The first step is always Phase 1 (Plan & Scope).
 
 ## Additional Documentation
   You MUST read the relevant agent_docs/ file before performing these tasks:
-  - development.md - Before making code changes
   - database-migration.md - Before writing any database migration files

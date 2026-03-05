@@ -8,6 +8,8 @@ description: |
 
 This skill creates a structured project folder for organizing all artifacts related to a feature, initiative, or complex change.
 
+**Important**: Before using this skill, read `projects/README.md` for project structure conventions and best practices.
+
 ## When to Use
 
 Use this skill when:
@@ -46,6 +48,8 @@ projects/{project-name}/
 
 ### 3. Create PROJECT.md
 
+**Important**: Follow the conventions in `projects/README.md` when creating the Status section.
+
 Use this template for `PROJECT.md`:
 
 ```markdown
@@ -71,23 +75,18 @@ Use this template for `PROJECT.md`:
 - [ ] Plan review & approval
 
 ### Implementation
-- [ ] Git setup (worktrees, branches)
-- [ ] Code changes
-- [ ] Self-review
-- [ ] Create PR
+{List PRs by repo with format: {Repo} PR #{number} - {description}}
+- [ ] {Repo} PR - {Description of changes}
 
 ### Deployment
-- [ ] CI checks pass
-- [ ] Code review approval
-- [ ] Merge to main/master
-- [ ] Deploy to staging
-- [ ] Deploy to production
+{List PRs with format: Deploy {Repo} PR #{number} - {description}}
+{Add (depends on {PR}) for deployment dependencies}
+- [ ] Deploy {Repo} PR - {Description}
 
 ### Testing
-- [ ] Unit/integration tests pass
+{High-level phases only}
 - [ ] Manual testing in staging
-- [ ] Production verification
-- [ ] Monitoring & rollout complete
+- [ ] Monitoring and feedback from Ops
 
 ## Key Decisions
 {Leave empty - to be filled during planning and implementation}
@@ -187,6 +186,7 @@ Add files here for:
 Show the user:
 - The created directory structure
 - The populated PROJECT.md
+- Reference to conventions: "See `projects/README.md` for project conventions and best practices."
 - Next steps: "You can now start investigation or planning. When ready, use the `create-plan` skill to begin Phase 1."
 
 ### 6. Update Git

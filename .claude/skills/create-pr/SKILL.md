@@ -139,8 +139,6 @@ EOF
 )"
 ```
 
-**Note**: The multi-commit NOTE block should only be included when there are 2 or more commits (see section 9).
-
 ### 8. Linking Issues
 
 If a Jira ticket is referenced:
