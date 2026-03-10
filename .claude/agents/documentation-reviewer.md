@@ -59,7 +59,7 @@ Triggered when invoked via `/verify-docs` or when the caller specifies a branch 
 
 Check every factual claim against the code. Priority order:
 
-1. **File paths and package structure** — Do referenced files, directories, and packages actually exist?
+1. **File paths and package structure** — Do referenced files, directories, and packages actually exist? Always verify from the repository root directory (e.g., `ls <repo-root>/path/to/file`). Do NOT rely solely on recursive glob searches within subdirectories — scripts and config files often live at the repo root.
 2. **Module descriptions** — Does each module actually do what the docs say it does?
 3. **Integration points** — Are Kafka topics, REST endpoints, gRPC stubs described accurately? Are any missing?
 4. **State machines** — Do all documented states and transitions exist in code? Are any undocumented?
