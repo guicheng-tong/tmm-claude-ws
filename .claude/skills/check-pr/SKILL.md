@@ -110,7 +110,9 @@ Poll in a loop until **all CI checks have reached a terminal state** AND **revie
          gh run rerun <run_id> --failed
          ```
        - Notify the user that unrelated failures were re-triggered.
-       - **After re-running**: Go back to the **Polling loop** above and wait for the re-triggered jobs to complete before reporting final results.
+       - **After re-running**: Go back to the **Polling loop** and wait for the re-triggered jobs to complete.
+       - **If the same unrelated tests fail again**: Re-run them again. Repeat up to 3 re-run attempts per failing run.
+       - **If still failing after 3 attempts**: Report to the user as a persistent flaky failure and stop retrying.
      - **Related failure** (failing tests correspond to changed files):
        - Flag to the user with the file path correlation so they can investigate.
 
