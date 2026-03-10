@@ -120,7 +120,7 @@ Using the final comment data from the last poll:
 
 - **Filter out resolved threads**: Only include review threads where `isResolved` is `false`. Skip any resolved threads entirely.
 - **Include all comments in unresolved threads**: For each unresolved review thread, include ALL comments in that thread (the original comment and any replies).
-- **Filter bot comments at all levels**: Exclude automated comments from bots like `github-actions`, `platon-github-app-production`, `wise-sonarqube-pr-decorator`, `copilot-pull-request-reviewer` at all levels (including nested replies). Only filter summary comments, not inline code review comments.
+- **Filter bot summary comments only**: Exclude automated *summary* comments (general PR comments, not inline code reviews) from bots like `github-actions`, `platon-github-app-production`, `wise-sonarqube-pr-decorator`. **Do NOT filter bot inline code review comments** — these often contain useful suggestions (e.g., from `copilot-pull-request-reviewer`). Treat bot code review comments the same as human comments: include them in the table, classify them, and present them for interactive resolution.
 - Build a markdown table:
 
   | # | Comment | Author | File:Line | Changes needed? | Suggested response |
