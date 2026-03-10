@@ -45,3 +45,4 @@ Do NOT skip straight to coding. The first step is always Phase 1: Plan & Scope.
 ## Additional Documentation
   You MUST read the relevant agent_docs/ file before performing these tasks:
   - database-migration.md - Before writing any database migration files
+  - git-conventions.md - Before any git commit or push
