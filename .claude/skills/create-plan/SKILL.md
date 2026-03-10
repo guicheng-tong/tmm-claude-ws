@@ -16,23 +16,13 @@ Always ask questions when unclear, flag any contradictions, and point out mistak
 When helping user to plan for changes, follow these steps:
 
 ### 0. Determine Project Context
-Before starting the planning process, determine where to organize the plan:
+If a project context is already loaded, use it. Otherwise:
 
-**Check for existing projects:**
 - List contents of `projects/` directory (if it exists)
 - Identify if any existing project folders relate to this work
-
-**Ask the user to choose:**
-- **Existing project**: Use an existing project folder (show list of available projects)
-- **New project**: Create a new project folder using the `start-project` skill
-- **No project (simple change)**: Create a single plan file in root `plans/` directory
-
-**Decision criteria to guide the user:**
-- Use "New project" for: multi-phase work, multiple PRs, cross-repository changes
-- Use "Existing project" for: continuing work on an established feature or initiative
-- Use "No project" for: simple changes, bug fixes, single-PR features
-
-Wait for user selection before proceeding.
+- If a match exists, use it
+- If no match and the work is non-trivial (multi-phase, multi-repo, or multiple PRs), create a new project using the `start-project` skill
+- If the work is simple (single PR, bug fix), use the root `plans/` directory
 ### 1. Clarification
 Clarify user goals in this change, any assumptions they would like to verify, and any context they would like to add.
 Make sure that each of the above is clear and agreed by the user. Ask questions if any part is unclear, and provide a summary of user goals, verified assumptions, and additional context at the end of this stage
@@ -48,7 +38,20 @@ If there are too many changes, divide them up into different phases, ensuring th
 This is an iterative process, after providing the scoped plan, show a summary to the user and ask for feedback.
 If any assumptions are made, clarify them with the user.
 
-### 4. Finalisation
+### 4. Update PROJECT.md
+If working within a project folder, update `PROJECT.md` to reflect anything discovered or changed during steps 1–3:
+
+- **Affected Repositories**: Add or update entries for any repositories identified during scoping. Use the format:
+  ```
+  - `{repo-name}` ({brief role description})
+  ```
+- **Status**: Update planning checklist items as appropriate
+- **Key Decisions**: Add any architectural decisions or trade-offs surfaced during planning
+- **Dependencies**: Add cross-repo or sequencing dependencies discovered during scoping
+
+This keeps PROJECT.md the single source of truth for the project's scope and state.
+
+### 5. Finalisation
 Once the plan is finalised, create a md file for the plan with a relevant name.
 
 **Location:**
@@ -66,8 +69,9 @@ The plan should include:
 - Scoped implementation steps (from Step 3)
 - Any architectural decisions or trade-offs
 
-After creating the plan, update the project's `PROJECT.md` (if it exists) to:
+After creating the plan, update `PROJECT.md` (if it exists) to:
 - Mark "Create implementation plan" as complete under the Planning section
 - Add a link to the plan file in the "Links" section
+- Add or update Implementation/Deployment status items based on the plan's scope
 
 

@@ -30,7 +30,6 @@ Ask the user for:
 - **Project name**: Feature or initiative name (kebab-case, e.g., "trade-confirmation-blocklist")
 - **Overview**: Brief description of what this project achieves and why it matters
 - **Ticket(s)**: Jira ticket IDs (e.g., TFXENG-8405)
-- **Affected repositories**: Which repos will have changes (e.g., order-management, treasury)
 
 ### 2. Create Project Directory Structure
 
@@ -62,11 +61,7 @@ Use this template for `PROJECT.md`:
 - {TICKET-ID}: {Link to ticket}
 
 ## Affected Repositories
-{For each repository:}
-- `{repo-name}` ({brief role description})
-  - Worktree: `{repo-name}-{TICKET-ID}-{description}`
-  - Branch: `{TICKET-ID}-{description}`
-  - PR: {leave empty initially}
+{Leave empty — populated automatically during planning and implementation}
 
 ## Status
 ### Planning

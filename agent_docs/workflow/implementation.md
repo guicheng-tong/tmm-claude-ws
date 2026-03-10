@@ -2,17 +2,21 @@
 
 Default workflow for implementation tasks. Read this at the start of any task involving code changes.
 
+## Phase 0: Load Project Context
+
+If the task relates to an existing project in `projects/`:
+- Read `projects/README.md` for conventions
+- Read the project's `PROJECT.md` for scope, affected repos, status, and decisions
+- Read any active task checklists in the project's `tasks/` directory
+
+If no existing project applies and the task is non-trivial (multi-phase, multi-repo, or multiple PRs):
+- Create a new project using the `start-project` skill
+
+This ensures continuity across sessions. Skip if the change is a one-liner or trivially scoped.
+
 ## Phase 1: Plan & Scope
 
-Follow the `create-plan` skill process. This covers:
-- Determining project context (existing project, new project, or no project for simple changes)
-- Clarification of goals, assumptions, and context
-- Establishing a verification process (primarily tests)
-- Scoping the implementation
-- Iterative plan review with user
-- Finalising the plan into the appropriate location:
-  - `projects/{project-name}/plans/` if using project structure
-  - `plans/` for standalone plans
+Follow the `create-plan` skill process.
 
 **Skip if**: the change is a one-liner or trivially scoped (e.g., fixing a typo, updating a config value).
 
@@ -60,13 +64,8 @@ Follow the `create-plan` skill process. This covers:
 
 ## Phase 6: Create PR
 
-Follow the `create-pr` skill process. This covers:
+Follow the `create-pr` skill process.
 - Base branch should be the one provided in Phase 3, do not prompt user
-- Pre-PR checks (tests, lint, version bumps)
-- Base branch detection and confirmation
-- PR template selection and filling
-- Commit message formatting
-- PR creation via `gh pr create`
 - Move to the next phase without user confirmation after completion
 
 **Skip if**: never — always required.
@@ -85,8 +84,10 @@ Follow the `create-pr` skill process. This covers:
 
 ## Phase 8: Request Review
 
-- **TMM repos** : open the PR URL in the browser
-- **Non-TMM repos**: comment `/request-review` on the PR, then open the PR URL in the browser
+- Determine the repo owner (check CODEOWNERS, repo settings, or README)
+- If the repo is owned by TMM: open the PR URL in the browser
+- If the repo is owned by another team: comment `/request-review {team-name}` on the PR, then open the PR URL in the browser
+- If there are multiple owning teams or ownership is unclear: ask the user which team to request review from, then comment `/request-review {team-name}`
 
 **Skip if**: never — always required.
 
