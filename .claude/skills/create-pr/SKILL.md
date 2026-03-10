@@ -42,14 +42,23 @@ Determine the PR target branch and confirm it with the user before proceeding:
 
 **Always use the appropriate PR template:**
 
-1. **Check for a repository-specific template** by reading it from the confirmed base branch (this works regardless of which branch you are currently on):
+1. **Check for a repository-specific template** by reading it from the confirmed base branch (this works regardless of which branch you are currently on). Try each path as a **separate Bash call** and stop at the first one that succeeds:
    ```bash
-   git show <base-branch>:.github/PULL_REQUEST_TEMPLATE.md 2>/dev/null || \
-   git show <base-branch>:.github/pull_request_template.md 2>/dev/null || \
-   git show <base-branch>:PULL_REQUEST_TEMPLATE.md 2>/dev/null || \
-   git show <base-branch>:pull_request_template.md 2>/dev/null || \
-   echo "NO_REPO_TEMPLATE"
+   git show <base-branch>:.github/PULL_REQUEST_TEMPLATE.md
    ```
+   If that fails, try:
+   ```bash
+   git show <base-branch>:.github/pull_request_template.md
+   ```
+   If that fails, try:
+   ```bash
+   git show <base-branch>:PULL_REQUEST_TEMPLATE.md
+   ```
+   If that fails, try:
+   ```bash
+   git show <base-branch>:pull_request_template.md
+   ```
+   If all four fail, there is no repository-specific template (`NO_REPO_TEMPLATE`).
 
 2. **If no repository template exists** (output is `NO_REPO_TEMPLATE`): Fetch the organization-wide template using GitHub CLI:
    ```bash
@@ -73,17 +82,23 @@ When filling out PR templates:
 Follow these steps:
 
 1. **Understand changes**: Use `git status` and `git diff` to understand what has been modified
-2. **Ensure branch is up to date with base**:
+2. **Ensure branch is up to date with base** (run each as a separate Bash call):
    ```bash
    git fetch origin <base-branch>
+   ```
+   Then:
+   ```bash
    git log --oneline HEAD..origin/<base-branch>
    ```
    If there are commits on the base branch not in the feature branch:
    - Inform the user that the branch is **behind** the base by N commits
    - Ask the user whether to rebase before creating the PR
-   - If yes, rebase and force push:
+   - If yes, rebase first:
      ```bash
      git rebase origin/<base-branch>
+     ```
+     Then force push:
+     ```bash
      git push --force-with-lease
      ```
    - If no, proceed but note the PR will need updating later

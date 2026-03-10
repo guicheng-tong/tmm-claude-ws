@@ -18,8 +18,10 @@ SANITIZED=$(echo "$COMMAND" | awk '
     # Extract delimiter name (strip <<, -, \, and single quotes)
     d = $0
     sub(/.*<<-?\\?\047?/, "", d)
-    sub(/\047?.*/, "", d)
+    sub(/\047.*/, "", d)       # strip trailing single-quote and everything after
+    sub(/[^A-Za-z_].*/, "", d) # keep only the delimiter word
     delim = d
+    if (delim == "") next      # skip if extraction failed
     in_heredoc = 1
     next
   }
