@@ -4,7 +4,7 @@ This workspace is a meta-repo for TMM team. It is organised as such:
 - tmm-repos: This folder contains all repositories directly owned by TMM
 - relevant-repos: This folder contains repositories not owned by TMM, but might have some direct connection to TMM repositories, such as payout-service
 - infra-repos: This folder contains repositories that provide infrastructure, and indirectly are used by TMM, such as configurations for kubernetes setup
-- plans: This folder contains md files for projects that are in progress.
+- projects: This folder contains md files for projects that are in progress.
 
 ## Repository-Level Documentation
 Before exploring or searching a repository's code, first check for documentation at its root:
