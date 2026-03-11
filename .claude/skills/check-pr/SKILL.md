@@ -10,6 +10,16 @@ description: |
 
 This skill checks the current PR's review comments and CI status, summarising actionable items.
 
+## Output
+
+The skill returns a final status after all polling and retries are complete:
+
+- **`all_pass`**: All CI checks passed and review comments are summarised.
+- **`related_failure`**: CI failures correlate with the PR's changed files. Includes file path correlations for investigation.
+- **`persistent_flaky`**: Unrelated CI failures persisted after 3 re-run attempts. Includes details of the failing checks.
+
+The skill handles all internal polling (30-second intervals) and flaky test retries (up to 3 attempts) before returning. Callers should not add their own retry or polling logic.
+
 ## Instructions
 
 ### 1. Identify Which PR to Check

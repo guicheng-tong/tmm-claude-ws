@@ -1,6 +1,7 @@
 #!/bin/bash
-# Pre-push test hook for TMM repos
-# Runs appropriate tests based on project type before allowing git push
+# Pre-push test hook
+# Runs appropriate tests based on project type before allowing git push.
+# Activates in any git repository that has gradlew or package.json.
 
 # Read tool input from stdin (Claude Code PreToolUse sends JSON on stdin)
 INPUT=$(cat)
@@ -11,12 +12,9 @@ if ! echo "$cmd" | grep -qE '^git\b.*\bpush\b'; then
   exit 0  # Not a push command, allow it
 fi
 
-# Get current working directory
-cwd=$(pwd)
-
-# Check if we're in a TMM repo
-if ! echo "$cwd" | grep -q '/claude-ws/tmm-repos/'; then
-  exit 0  # Not in TMM repos, skip tests
+# Check if we're in a git repository
+if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  exit 0
 fi
 
 # Find the remote tracking branch to diff against

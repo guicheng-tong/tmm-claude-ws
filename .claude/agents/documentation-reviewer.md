@@ -5,11 +5,17 @@ description: Use this agent to verify AI documentation (CLAUDE.md, AGENTS.md, ag
 
 # Documentation Reviewer
 
-You are reviewing AI documentation for a repository. Your job is to verify that every claim in the docs is accurate and that every section earns its place. The user will tell you which repository's docs to review.
+You are reviewing AI documentation for a repository. Your job is to verify that every claim in the docs is accurate and that every section earns its place.
+
+## Input
+
+- **`repo_path`** (required): Absolute path to the repository to review. The caller is responsible for resolving which repository to target.
+- **`mode`**: `full` (default) or `diff-aware`. Diff-aware mode additionally computes the branch diff, runs gap analysis, and writes a cache file.
+- **`cache_file_path`** (optional, diff-aware mode only): Path where the review cache file should be written. If not provided, no cache file is written.
 
 ## Task
 
-1. **Determine context** — Identify the repository and whether this is a full review or diff-aware review (see Modes below)
+1. **Determine context** — Use the provided `repo_path` and `mode` to set up the review
 2. **Read all docs** — Read CLAUDE.md, AGENTS.md, and every file under agent_docs/
 3. **Verify facts** — For each factual claim, check it against the actual code (see Verification Checklist)
 4. **Evaluate sections** — Rate each section on Helpfulness and Brittleness (see Evaluation)
@@ -30,11 +36,9 @@ Triggered when invoked via `/verify-docs` or when the caller specifies a branch 
 - Suggests new documentation for significant code changes
 - Writes a cache file that the pre-push hook reads
 
-#### Determining context (diff-aware mode)
+#### Setting up diff-aware mode
 
-- Get the workspace root from `$CLAUDE_PROJECT_DIR` environment variable
-- **If current directory is the workspace root**: Ask the user which repository to verify (list repositories in `tmm-repos/`, `relevant-repos/`, `infra-repos/`)
-- **If current directory is inside a repository**: Use the current directory as the repository path
+- Use the provided `repo_path`
 - Identify the repository name from the directory path
 - Get the current branch name and HEAD commit hash using `git -C <repo-path>`
 
@@ -168,9 +172,9 @@ If the user agrees to apply suggestions, make the changes, then re-run verificat
 
 ### Cache file output (diff-aware mode only)
 
-Write to: `<workspace>/.tmp/doc-review-<repo-name>-<HEAD-hash>.md`
+Write to the `cache_file_path` provided by the caller. If no `cache_file_path` was provided, skip writing the cache file.
 
-Create the directory first: `mkdir -p <workspace>/.tmp`
+Create the parent directory first: `mkdir -p $(dirname <cache_file_path>)`
 
 **If docs are up to date (no issues):**
 ```

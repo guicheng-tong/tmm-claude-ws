@@ -16,11 +16,22 @@ This ensures continuity across sessions. Skip if the change is a one-liner or tr
 
 ## Phase 1: Plan & Scope
 
-Follow the `create-plan` skill process.
+Invoke the `create-plan` skill with the following inputs:
+
+- **`output_directory`**: If a project was loaded in Phase 0, use `projects/{project-name}/plans/`. Otherwise, use `plans/`.
+- **`prior_context`**: If the user has already stated goals, assumptions, or context earlier in the conversation, pass them through so the skill confirms rather than re-asking.
+
+After `/create-plan` returns the plan file path, update project tracking if within a project folder:
+- Update `PROJECT.md`:
+  - Add or update **Affected Repositories** with any repositories identified during scoping
+  - Add any **Key Decisions** or architectural trade-offs surfaced during planning
+  - Add any cross-repo or sequencing **Dependencies** discovered during scoping
+  - Mark "Create implementation plan" as complete under the Planning section
+  - Add the plan file path to the **Links** section
 
 **Skip if**: the change is a one-liner or trivially scoped (e.g., fixing a typo, updating a config value).
 
-**Gate: User must approve the plan before proceeding.**
+**Gate: User must approve the plan before proceeding (handled within the skill's section-by-section review).**
 
 ## Phase 2: Create Checklist
 
@@ -64,21 +75,24 @@ Follow the `create-plan` skill process.
 
 ## Phase 6: Create PR
 
-Follow the `create-pr` skill process.
-- Base branch should be the one provided in Phase 3, do not prompt user
-- Move to the next phase without user confirmation after completion
+Invoke the `create-pr` skill with the following inputs:
+
+- **`base_branch`**: The base branch confirmed by the user in Phase 3.
+
+Move to the next phase without user confirmation after completion.
 
 **Skip if**: never — always required.
 
 ## Phase 7: CI Check
 
-- Run the `check-pr` skill process
-- Handle failures:
-  - **Flaky/unrelated failures**: re-run the failed jobs
-  - **Related failures**: fix the issue and loop back to Phase 5
-- If checks are still pending: wait 5 minutes (`sleep 300`), then re-run the entire `check-pr` skill process
-- Repeat until all checks pass or a related failure needs user input
-- Move to the next phase without user confirmation after completion
+Invoke the `check-pr` skill. It handles all polling and flaky-test retries internally and returns a final status.
+
+Act on the returned status:
+- **`all_pass`**: Move to the next phase.
+- **`related_failure`**: Fix the issue, loop back to Phase 5 (Self-Review).
+- **`persistent_flaky`**: Inform the user and stop — requires manual investigation.
+
+Move to the next phase without user confirmation after completion.
 
 **Skip if**: never — always required.
 

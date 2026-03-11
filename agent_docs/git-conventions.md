@@ -12,19 +12,22 @@ Read this before any git commit or push.
 ## Commit Message Format
 
 ```
-<imperative summary, max 72 chars>
+<ticket-id> <imperative summary> (max 72 chars total)
 
 <optional body explaining why the change was made>
 
 Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 ```
 
+- Include the Jira ticket ID at the start of the summary line (e.g., `TFXENG-1234 Add retry logic for flaky CI tests`)
+- If no ticket applies, omit the prefix and start with the imperative summary
+
 Use a HEREDOC when passing commit messages to avoid quoting issues:
 ```bash
 git commit -m "$(cat <<'EOF'
-Summary line here
+TFXENG-1234 Add retry logic for flaky CI tests
 
-Body here.
+Retries up to 3 times to handle transient CI failures.
 
 Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 EOF

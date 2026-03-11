@@ -1,7 +1,8 @@
 #!/bin/bash
-# Pre-push documentation review hook for TMM repos
+# Pre-push documentation review hook
 # Checks if documentation (CLAUDE.md, AGENTS.md, agent_docs/) needs updating
 # before allowing git push.
+# Activates in any git repository that has documentation files.
 #
 # Uses a review cache file in .tmp/ written by the /verify-docs skill.
 # Review file format: first line is 0 (docs up to date) or 1 (updates needed),
@@ -16,17 +17,14 @@ if ! echo "$cmd" | grep -qE '^git\b.*\bpush\b'; then
   exit 0
 fi
 
-# Get current working directory
-cwd=$(pwd)
-
-# Check if we're in a TMM repo
-if ! echo "$cwd" | grep -q '/claude-ws/tmm-repos/'; then
+# Check if we're in a git repository
+if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
   exit 0
 fi
 
 # Extract workspace root and repo name
-workspace=$(echo "$cwd" | sed 's|\(/claude-ws\)/.*|\1|')
-repo_name=$(echo "$cwd" | sed 's|.*/tmm-repos/||' | cut -d'/' -f1)
+workspace="${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel)/..}"
+repo_name=$(basename "$(git rev-parse --show-toplevel)")
 
 # Check if the repo has any documentation files
 has_docs=false

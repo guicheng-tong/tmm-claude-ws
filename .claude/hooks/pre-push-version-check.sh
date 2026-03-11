@@ -1,6 +1,7 @@
 #!/bin/bash
-# Pre-push library version check hook for TMM Java repos
+# Pre-push library version check hook
 # Ensures library module versions are bumped (semver increment) when source files change.
+# Activates in any git repository that has gradlew and library modules with version= in gradle.properties.
 # On failure, outputs structured instructions for Claude to auto-fix and retry.
 
 # Read tool input from stdin (Claude Code PreToolUse sends JSON on stdin)
@@ -12,11 +13,8 @@ if ! echo "$cmd" | grep -qE '^git\b.*\bpush\b'; then
   exit 0
 fi
 
-# Get current working directory
-cwd=$(pwd)
-
-# Check if we're in a TMM repo
-if ! echo "$cwd" | grep -q '/claude-ws/tmm-repos/'; then
+# Check if we're in a git repository
+if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
   exit 0
 fi
 

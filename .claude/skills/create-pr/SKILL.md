@@ -10,6 +10,12 @@ description: |
 
 This skill helps create pull requests that follow Wise's standardized templates and conventions.
 
+## Input
+
+The caller may provide any of the following before invoking this skill. If not provided, the skill gathers them interactively.
+
+- **`base_branch`** (optional): The target branch for the PR. If provided, skip the user confirmation prompt in Step 2. If not provided, detect the default branch and ask the user to confirm.
+
 ## Instructions
 
 When helping users create pull requests, follow these guidelines:
@@ -18,14 +24,15 @@ When helping users create pull requests, follow these guidelines:
 
 Before creating a PR, verify:
 - All changes are committed
-- Code quality checks and tests pass (run the repository's standard test/lint commands)
-- All required library versions are bumped
-  - Library version needs to be bumped if there are any code changes, even for any code addition 
-  - If changelog exists, update changelog
+- If changelog exists, update changelog
+
+Note: Tests and library version bumps are enforced by pre-push hooks (`pre-push-test.sh`, `pre-push-version-check.sh`) and do not need to be checked here.
 
 ### 2. Determine Base Branch
 
-Determine the PR target branch and confirm it with the user before proceeding:
+**If `base_branch` was provided:** Use it directly for all subsequent steps (template detection, freshness check, `gh pr create --base`, etc.). Do not prompt the user.
+
+**If `base_branch` was not provided:**
 
 1. **Detect the repository's default branch**:
    ```bash
@@ -36,7 +43,7 @@ Determine the PR target branch and confirm it with the user before proceeding:
    - Wait for the user to confirm or specify a different branch
 3. **Store the confirmed base branch** and use it for all subsequent steps (template detection, freshness check, `gh pr create --base`, etc.)
 
-**Do NOT proceed until the user has confirmed the base branch.**
+**Do NOT proceed until the base branch is determined.**
 
 ### 3. Pull Request Template Selection
 
@@ -108,15 +115,7 @@ Follow these steps:
 
 ### 6. Commit Message Format
 
-Structure commit messages as follows:
-- **First line**: `<ticket-id> <short description>` (up to 50 characters)
-  - Example: `TW-1234 add new payment validation`
-- **Second line**: Blank
-- **Body**: Longer description of the change (if needed)
-- **Footer** Always end with:
-  ```
-  Co-Authored-By: Claude <noreply@anthropic.com>
-  ```
+Follow the commit message format defined in `agent_docs/git-conventions.md`.
 
 ### 7. PR Creation Command
 
@@ -164,14 +163,13 @@ If a Jira ticket is referenced:
 When a user says "create a PR for my changes":
 
 1. Check `git status` for changes
-2. **Determine base branch** using `gh repo view` and **ask user to confirm** before proceeding
+2. **Determine base branch**: use `base_branch` input if provided, otherwise detect and ask user to confirm
 3. Check for repo PR template using `git show <base-branch>:.github/PULL_REQUEST_TEMPLATE.md`
 4. If no repo template found, fetch org-wide template via `gh api`
 5. Create branch if needed
-6. Commit with proper message format
-7. Run repository's standard test/lint commands to ensure code quality
-8. **Create PR using `gh pr create`**
-9. Return the PR URL to the user and open it in the browser using `open <PR_URL>`
+6. Commit following `agent_docs/git-conventions.md` format
+7. **Create PR using `gh pr create`**
+8. Return the PR URL to the user and open it in the browser using `open <PR_URL>`
 
 ## Additional Guidelines
 
@@ -233,5 +231,4 @@ Before submitting the PR, verify:
 - [ ] Template is correctly filled out
 - [ ] Description clearly explains the changes
 - [ ] Jira ticket is linked (if applicable)
-- [ ] Code quality checks pass
 - [ ] Session prompts history is included
