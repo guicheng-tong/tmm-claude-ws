@@ -1,14 +1,14 @@
 ---
 name: create-pr
 description: |
-  Guides the creation of pull requests following Wise's standardized templates and conventions.
+  Guides the creation of pull requests following standardized templates and conventions.
   Use this skill when users ask to "create a PR", "make a pull request", "submit changes",
   "create commit and PR" or any variation requesting help with pull request creation.
 ---
 
 # PR Creator
 
-This skill helps create pull requests that follow Wise's standardized templates and conventions.
+This skill helps create pull requests that follow standardized templates and conventions.
 
 ## Input
 
@@ -69,8 +69,9 @@ Note: Tests and library version bumps are enforced by pre-push hooks (`pre-push-
 
 2. **If no repository template exists** (output is `NO_REPO_TEMPLATE`): Fetch the organization-wide template using GitHub CLI:
    ```bash
-   gh api repos/transferwise/.github/contents/PULL_REQUEST_TEMPLATE.md --jq '.content' | base64 -d
+   gh api repos/{github_org}/.github/contents/PULL_REQUEST_TEMPLATE.md --jq '.content' | base64 -d
    ```
+   Replace `{github_org}` with the value from CLAUDE.md Team Configuration (e.g., `gh api repos/yourorg/.github/contents/PULL_REQUEST_TEMPLATE.md ...`).
 
 **IMPORTANT**: Do NOT create custom PR description structures. Always follow the standardized template for consistency and compliance with security and documentation requirements.
 
@@ -156,7 +157,7 @@ EOF
 ### 8. Linking Issues
 
 If a Jira ticket is referenced:
-- Add the ticket link to the PR description: `https://transferwise.atlassian.net/browse/<ticket-id>`
+- Add the ticket link to the PR description: `{jira_base_url}/browse/<ticket-id>` (use the `jira_base_url` from CLAUDE.md Team Configuration)
 
 ## Example Workflow
 

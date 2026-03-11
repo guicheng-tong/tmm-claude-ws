@@ -29,7 +29,7 @@ Do NOT use for:
 Ask the user for:
 - **Project name**: Feature or initiative name (kebab-case, e.g., "trade-confirmation-blocklist")
 - **Overview**: Brief description of what this project achieves and why it matters
-- **Ticket(s)**: Jira ticket IDs (e.g., TFXENG-8405)
+- **Ticket(s)**: Jira ticket IDs (e.g., PROJ-1234)
 
 ### 2. Create Project Directory Structure
 

@@ -82,7 +82,7 @@ Tasks are defined at root level because they operate on `agent_docs/`. The depen
 
 ## Reference Implementations
 
-See `transactions-inventory` and `market-connector` for working examples of `validate-repository-map.sh`.
+See existing repositories with `agent_docs/validation_scripts/` for working examples of `validate-repository-map.sh`.
 
 ## Principles
 

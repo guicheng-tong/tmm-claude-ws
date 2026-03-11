@@ -48,7 +48,7 @@ After `/create-plan` returns the plan file path, update project tracking if with
 - Ask the user if an existing worktree exists for the target repository
 - If not, ask for the ticket number
 - Ask the user for the base branch to be used later on in Phase 6
-- Create worktree named `{repository-name}-TFXENG{ticket-number}-{short-description}`
+- Create worktree named `{repository-name}-{jira_project_key}{ticket-number}-{short-description}` (use the `jira_project_key` from CLAUDE.md Team Configuration)
 - Keep the main repository on main/master branch and up to date
 
 **Skip if**: never — always required.
@@ -99,7 +99,7 @@ Move to the next phase without user confirmation after completion.
 ## Phase 8: Request Review
 
 - Determine the repo owner (check CODEOWNERS, repo settings, or README)
-- If the repo is owned by TMM: open the PR URL in the browser
+- If the repo is owned by your team: open the PR URL in the browser
 - If the repo is owned by another team: comment `/request-review {team-name}` on the PR, then open the PR URL in the browser
 - If there are multiple owning teams or ownership is unclear: ask the user which team to request review from, then comment `/request-review {team-name}`
 

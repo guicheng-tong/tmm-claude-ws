@@ -19,13 +19,13 @@ Read this before any git commit or push.
 Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 ```
 
-- Include the Jira ticket ID at the start of the summary line (e.g., `TFXENG-1234 Add retry logic for flaky CI tests`)
+- Include the Jira ticket ID at the start of the summary line (e.g., `PROJ-1234 Add retry logic for flaky CI tests`)
 - If no ticket applies, omit the prefix and start with the imperative summary
 
 Use a HEREDOC when passing commit messages to avoid quoting issues:
 ```bash
 git commit -m "$(cat <<'EOF'
-TFXENG-1234 Add retry logic for flaky CI tests
+PROJ-1234 Add retry logic for flaky CI tests
 
 Retries up to 3 times to handle transient CI failures.
 
@@ -44,5 +44,5 @@ EOF
 
 ## Worktrees
 
-- Worktree naming: `{repository-name}-TFXENG{ticket-number}-{short-description}`
+- Worktree naming: `{repository-name}-{jira_project_key}{ticket-number}-{short-description}` (use the `jira_project_key` from CLAUDE.md Team Configuration)
 - Keep the main repository checkout on `main`/`master` and up to date.

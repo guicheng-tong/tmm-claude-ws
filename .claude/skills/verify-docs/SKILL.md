@@ -11,7 +11,7 @@ description: |
 ### 1. Resolve the target repository
 
 - **If the current directory is inside a repository** (has a `.git` directory or is a git worktree): Use the current directory as the repository path.
-- **If the current directory is the workspace root** (e.g., `claude-ws/`): List repositories in `tmm-repos/`, `relevant-repos/`, `infra-repos/` and ask the user which one to verify.
+- **If the current directory is the workspace root** (e.g., `claude-ws/`): List repositories in `owned/`, `related/`, `infra/` and ask the user which one to verify.
 
 ### 2. Compute the cache file path
 
