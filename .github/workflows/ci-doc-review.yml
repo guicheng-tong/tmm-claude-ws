@@ -1,0 +1,104 @@
+name: CI Documentation Review
+
+on:
+  workflow_call:
+    inputs:
+      event_name:
+        required: true
+        type: string
+      event_payload:
+        required: true
+        type: string
+      repository:
+        required: true
+        type: string
+      ref:
+        required: true
+        type: string
+      sha:
+        required: true
+        type: string
+      actor:
+        required: true
+        type: string
+
+jobs:
+  doc-review:
+    uses: transferwise/claude-code-action/.github/workflows/reusable-workflow-ci-ai-agents.yaml@main
+    secrets: inherit
+    with:
+      event_name: ${{ inputs.event_name }}
+      event_payload: ${{ inputs.event_payload }}
+      repository: ${{ inputs.repository }}
+      ref: ${{ inputs.ref }}
+      sha: ${{ inputs.sha }}
+      actor: ${{ inputs.actor }}
+      team: "treasury"
+      custom_prompt: |
+        REPO: ${{ inputs.repository }}
+
+        You are a documentation reviewer. Your task is to check whether the documentation
+        in this repository is still accurate given the code changes in this pull request.
+        Do NOT review code quality, style, or logic — focus exclusively on documentation accuracy.
+
+        ## Documentation files to review
+
+        Read all of these files:
+        - CLAUDE.md
+        - AGENTS.md
+        - Readme.md
+        - All files under agent_docs/
+
+        ## Gap analysis
+
+        Compare the code changes in this PR against the existing documentation.
+        Flag any of these issues:
+
+        - New features or modules that need new entries in AGENTS.md or new files in agent_docs/
+        - Changed APIs or interfaces that make documented APIs inaccurate
+        - Changed dependencies or integrations that make service integration docs incorrect
+        - Changed build/test processes that make build and testing docs inaccurate
+        - Removed functionality that is still documented
+        - Changed state machines or workflows that make state transition docs inaccurate
+
+        Focus only on changes that materially affect what the documentation describes.
+        Ignore minor refactors, variable renames, or internal implementation changes that
+        do not affect documented behaviour.
+
+        ## Verification checklist
+
+        For any documentation claims that intersect with the PR's changes, verify:
+
+        1. File paths and package structure — do referenced files, directories, and packages still exist?
+        2. Module descriptions — do modules still do what the docs say?
+        3. Integration points — are Kafka topics, REST endpoints described accurately?
+        4. State machines — do documented states and transitions still match code?
+        5. Domain concepts — do business rules in docs match code logic?
+        6. Build commands — do documented commands still work?
+        7. Entry points — do named classes, services, and types exist where docs say?
+
+        ## Output
+
+        Post a single PR comment with your findings. Use this format:
+
+        ### Documentation Review
+
+        **If issues are found:**
+
+        List each issue with:
+        - The documentation file affected
+        - What the documentation currently says
+        - What the code now does
+        - Suggested fix
+
+        **If no issues are found:**
+
+        Post: "No documentation issues found — docs are consistent with this PR's changes."
+
+        ## Principles
+
+        - Factual correctness is the top priority — a doc that reads well but is wrong is harmful
+        - Verify against code, not assumptions about what the code should do
+        - Do not nitpick grammar or style
+        - Wrong docs are worse than missing docs
+        - Do not suggest code changes, only report documentation findings
